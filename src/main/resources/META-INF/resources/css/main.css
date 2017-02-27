@@ -1,0 +1,238 @@
+@import url(main-responsive.css);
+
+.whiteboard-btn-group {
+    padding: 10px 0;
+    button {
+        margin-right: 10px;
+    }
+}
+
+.whiteboard-portlet,
+.whiteboard-portlet label {
+    font-size: 12px;
+}
+
+.whiteboard-portlet #container,
+.whiteboard-portlet .editor {
+    position: relative;
+}
+
+/* users online tooltips */
+.whiteboard-portlet .user-modification-tooltips div {
+    position: absolute;
+    z-index: 200;
+    top: 0;
+    left: 0;
+    min-height: 50px;
+    border-left: 1px solid #A5A5A5;   
+    opacity: 0; 
+}   
+
+.whiteboard-portlet .user-modification-tooltips .sub-wrapper {
+    display: block;
+    background: #D3D3D3;
+    padding: 5px;
+    border-top: 1px solid #A5A5A5;
+    border-right: 1px solid #A5A5A5;
+    border-bottom: 1px solid #A5A5A5;
+}
+
+.whiteboard-portlet .user-modification-tooltips img {
+    width: 20px;
+    margin-right: 10px;
+    border-radius: 20px;
+}
+
+/* users online list */
+.whiteboard-portlet .users-online {
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 200; 
+    background: #FFFFFF;
+}
+
+.whiteboard-portlet .users-online .expand-collapse-btn {
+    display: none;
+    padding: 20px;
+    font-size: 17px;
+}
+
+.whiteboard-portlet .users-online .users-online-wrapper {
+    padding: 20px;
+    border: 1px solid #D1D1D1;
+}
+
+.whiteboard-portlet .users-online img {
+    width: 25px;
+    margin-right: 10px;
+    border-radius: 20px;
+}
+
+.whiteboard-portlet .users-online ul {
+    max-height: 400px;
+    overflow-y: scroll;
+}
+
+.whiteboard-portlet .users-online li {
+    border-bottom: 1px solid #D1D1D1;
+    padding: 10px 10px 10px 0;
+}
+
+/* menu */
+.whiteboard-portlet .editor menu {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 200;
+    padding: 5px;
+}
+
+.whiteboard-portlet .editor menu .btn.selected {
+    background: #CCCBCB;
+}
+
+.whiteboard-portlet .editor menu button {
+    width: 55px;
+}
+
+.whiteboard-portlet .editor  menu button span {
+    text-indent: -9999px;
+    display: block;
+    height: 20px;
+}
+
+.whiteboard-portlet .editor  menu button i {
+    background: none !important;
+}
+
+.whiteboard-portlet .editor menu button .dropdown-menu {
+    left: 100%;
+    top: 0;
+}
+
+.whiteboard-portlet .editor menu button[data-shape="rectangle"] span,
+.whiteboard-portlet .editor menu button[data-shape="rectangle"] span:hover {
+    background: url(../images/rectangle.gif) center no-repeat !important;
+}
+
+.whiteboard-portlet .editor menu button[data-shape="line"] span,
+.whiteboard-portlet .editor menu button[data-shape="line"] span:hover {
+    background: url(../images/line.gif) center no-repeat !important;
+}
+
+.whiteboard-portlet .editor  menu button[data-shape="circle"] span,
+.whiteboard-portlet .editor  menu button[data-shape="circle"] span:hover {
+    background: url(../images/circle.gif) center no-repeat !important;
+}
+
+.whiteboard-portlet .editor menu button[data-shape="text"] span,
+.whiteboard-portlet .editor menu button[data-shape="text"] span:hover {
+    background: url(../images/text.gif) center no-repeat !important;
+}
+
+/* color picker */
+.whiteboard-portlet .color-picker {
+    padding: 5px 0;
+    position: relative;
+}
+
+.whiteboard-portlet .color-picker .sample {
+    display: block;
+    background: green;
+    height: 25px;
+    width: 25px;
+    cursor: pointer;
+    border: 1px solid #696969;
+}
+
+.whiteboard-portlet .color-picker .opacity {
+    padding: 10px 0;
+    display: block;
+}
+
+.whiteboard-portlet .color-picker .color-picker-container.hidden {
+    display: none;
+}
+
+.whiteboard-portlet .color-picker .color-picker-container {
+    box-shadow: 1px 1px 1px 1px #C4C4C4;
+    position: absolute;
+    left: 70px;
+    top: 0;
+    width: 450px;
+    height: 160px;
+    background: #FFFFFF;
+}
+
+.whiteboard-portlet .color-picker .hue-dial,
+.whiteboard-portlet .color-picker .sliders {
+    float: left;
+}
+
+.whiteboard-portlet .color-picker .hue-dial {
+    padding-left: 30px;
+}
+
+.whiteboard-portlet .color-picker .sliders {
+    font-size: 12px;
+    color: #000000;
+    padding: 30px;
+}
+
+.whiteboard-portlet .color-picker .color {
+    display: block;
+    width: 80px;
+    height: 80px;
+    float: right;
+    margin: 15px 15px 0 0;
+}
+
+.whiteboard-portlet .color-picker .close-picker {
+    float: right;
+    font-size: 12px;
+    padding: 5px;
+}
+
+.whiteboard-portlet .color-picker .sliders strong {
+    display: block;
+}
+
+.whiteboard-portlet .color-picker .hue-dial .yui3-dial-ring {
+    background: url(../images/colorwheel.png) -25px -25px no-repeat;
+}
+
+.whiteboard-portlet .color-picker select {
+    width: 58px;
+    font-size: 10px;
+}
+
+/* text editor */
+.whiteboard-portlet .text-editor {
+    background: #D8D8D8;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.whiteboard-portlet .text-editor textarea {
+    width: 92%;    
+}
+
+.whiteboard-portlet .text-editor .yui3-widget-buttons {
+    display: none;
+}
+
+.whiteboard-portlet .canvas-container {
+    box-shadow: 1px 1px 1px 1px #C4C4C4;
+}
+
+/* yui fixes */
+.whiteboard-portlet .yui3-panel .text-editor .yui3-widget-hd {
+    background: none;
+    color: #000000;
+    padding: 0;
+}
+
+.whiteboard-portlet .text-editor .yui3-widget-buttons {
+    display: none;
+}

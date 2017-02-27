@@ -1,0 +1,21 @@
+
+/* users online list */
+@media screen and (max-width: 640px) {
+	 .aui .whiteboard-portlet .users-online {
+        .expand-collapse-btn {
+            display: block;
+            
+            &.selected {
+                background: #D3D3D3;
+            }
+        }
+        .users-online-wrapper {
+            display: none;
+            
+            &.show {
+                display: block;
+            }
+        }
+        
+    } 
+}    
