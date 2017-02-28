@@ -28,8 +28,6 @@ AUI.add('multiuser-whiteboard', function (A, NAME) {
     var SELECTOR_USERS_ONLINE = '.users-online';
     var SELECTOR_USER_MOD_TOOLTIPS = '.user-modification-tooltips';
     
-    var atmosphere = null;
-    
     var MultiuserEditor = A.Base.create('multiuser-whiteboard', A.EditorManager, [], {
         
         disconnectedModalMessage: null,
@@ -57,58 +55,36 @@ AUI.add('multiuser-whiteboard', function (A, NAME) {
         },
             
         bindCommEvents: function () {
-        	var self = this;
-            if (this.get('useAtmosphere')) {
-//            	require('atmosphere', function(_atmosphere) { 
-//            		atmosphere = _atmosphere
-//            		self.bindAtmosphere();
-//            	});
-            }
-        },
-        
-        /**
-         * Use atmosphere framework for real time communication
-         * 
-         * 
-         */
-        bindAtmosphere: function() {
-            var instance = this;
-            var baseUrl = document.location.toString().split('/').slice(0, 3).join('/'); // gets only protocol, domain and port from current url
-            var request = {
-                url: baseUrl + '/delegate/collaboration-whiteboard/?baseImagePath=' +
-                    encodeURIComponent(instance.get('baseImagePath')),
-                trackMessageLength: true,
-                transport: 'websocket'
-                //logLevel: 'debug',
+        	var instance = this;
+            
+            var websocket = new WebSocket(instance.get('websocketAddress'));
+            websocket.onopen = function(evt) {
+            	websocket.send(A.JSON.stringify({
+                    type:  MultiuserEditor.CONSTANTS.LOGIN
+                }));
             };
+            websocket.onclose = function(evt) {
 
-            request.onMessage = function (response) {
-                instance.processMessage(function(data) {
-                    instance.executeCommands(data.commands);
+            };
+            websocket.onmessage = function(event) {
+            	instance.processMessage(function(data) {
+                    instance.executeCommands(data.commands || []);
                     /* if user is currently joining the whiteboard, load the whiteboard  dump to show shapes previously created */
                     if (instance.get(JOINING)) {
                         instance.executeCommands(data.dump);
                         instance.set(JOINING, false);
                     }
-                }, A.JSON.parse(response.responseBody));
+                }, A.JSON.parse(event.data));
             };
-            request.onOpen = function (response) {
-                instance.get(COMM).push(A.JSON.stringify({
-                    type:  MultiuserEditor.CONSTANTS.LOGIN
-                }));
+            websocket.onerror = function(evt) {
+            	console.error(evt);
             };
-            
-            request.onClose = function (response) {
-                //instance.disconnectedModalMessage.show();
-            };
-            
-            instance.set(COMM, atmosphere.subscribe(request));
             /* broadcast */
             window.setInterval(function () {
                 if (!instance.get(COMMANDS).length) {
                     return;
                 }
-                instance.get(COMM).push(instance.stringifyCommands()); /* stringify not supported on old browsers */
+                websocket.send(instance.stringifyCommands()); /* stringify not supported on old browsers */
                 instance.set(COMMANDS, []);
             }, MultiuserEditor.CONSTANTS.BROADCAST_INTERVAL);
         },
@@ -225,23 +201,7 @@ AUI.add('multiuser-whiteboard', function (A, NAME) {
         ATTRS: {
             
             /**
-             * Stores websocket object or atmosphere handler
-             * 
-             */
-            comm: {
-                value: null
-            },
-            
-            /**
-             * Use atmosphere framework or not
-             * 
-             */
-            useAtmosphere: {
-                value: false
-            },
-            
-            /**
-             * Websocket address provided if atmosphere is not going to be used
+             * Websocket address
              * 
              */
             websocketAddress: {

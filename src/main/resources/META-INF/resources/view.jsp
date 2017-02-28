@@ -1,10 +1,16 @@
 <%@ include file="/init.jsp" %>
 
-<aui:script use="collaboration-whiteboard-portlet">
-	A.CollaborationWhiteboardPortlet.init();
-</aui:script>
+<%
+ String userImagePath = HtmlUtil.escape(user.getPortraitURL(themeDisplay));
+ String websocketURL = "ws://" + request.getServerName() + ":" + request.getServerPort() + CollaborationEndpoint.PATH;
+ websocketURL = HttpUtil.addParameter(websocketURL, "userId", user.getUserId());
+ websocketURL = HttpUtil.addParameter(websocketURL, "userImagePath", userImagePath);
+%>
 
-<input type="hidden" class="profile-image-path" value="<%= HtmlUtil.escape(user.getPortraitURL(themeDisplay)) %>"/>
+<aui:script use="collaboration-whiteboard-portlet">
+	A.CollaborationWhiteboardPortlet.init("<%= websocketURL %>");
+</aui:script>
+<input type="hidden" class="profile-image-path" value="<%=userImagePath %>"/>
 <div class="editor">
     <div class="users-online">
         <a href="#" class="expand-collapse-btn"><i class="icon-user"></i> <span class="count"></span> <liferay-ui:message key="rivetlogic.whiteboard.users.online"/></a>

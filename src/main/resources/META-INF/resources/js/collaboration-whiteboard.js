@@ -20,8 +20,9 @@ AUI.add('collaboration-whiteboard-portlet', function (A, NAME) {
 	
 	/**
 	 * Inits whiteboard portlet
+	 * @param url {String} Websocket endpoint url
 	 */
-	A.CollaborationWhiteboardPortlet.init = function() {
+	A.CollaborationWhiteboardPortlet.init = function(url) {
 		
 		var SELECTOR_WHITEBOARD_PORTLET = '.whiteboard-portlet';
     	var SELECTOR_CANVAS = 'canvas';
@@ -44,10 +45,10 @@ AUI.add('collaboration-whiteboard-portlet', function (A, NAME) {
         
         var editor = new A.MultiuserEditor({
             canvas: canvas,
+            websocketAddress: url,
             container: A.one(SELECTOR_WHITEBOARD_PORTLET + SPACE + SELECTOR_EDITOR),
             textEditorNode: A.one(SELECTOR_WHITEBOARD_PORTLET + SPACE + SELECTOR_TEXT_EDITOR),
             editorId: (Liferay.ThemeDisplay.getUserId() + DASH + Math.floor((Math.random() * 10) + 100)),
-            useAtmosphere: true,
             onlineUsersTemplate: A.one(SELECTOR_ONLINE_USERS_TEMPLATE).get('innerHTML'),
             usersTooltipsTemplate: A.one(SELECTOR_USER_TOOLTIPS_TEMPLATE).get('innerHTML'),
             baseImagePath: Liferay.ThemeDisplay.getPathImage(),

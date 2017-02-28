@@ -2,7 +2,8 @@ package com.rivetlogic.whiteboard.realtime;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 import javax.websocket.CloseReason;
 import javax.websocket.Endpoint;
@@ -12,7 +13,17 @@ import javax.websocket.Session;
 
 import org.osgi.service.component.annotations.Component;
 
+import com.liferay.portal.kernel.cache.MultiVMPoolUtil;
+import com.liferay.portal.kernel.cache.PortalCache;
+import com.liferay.portal.kernel.json.JSONException;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.util.HttpUtil;
+import com.liferay.portal.kernel.util.LocaleUtil;
 
 @Component(
 		immediate = true,
@@ -24,34 +35,88 @@ import com.liferay.portal.kernel.util.HttpUtil;
 public class CollaborationEndpoint extends Endpoint {
 	
 	public static final String PATH = "/o/collaboration-whiteboard";
-	private Map<String, Session> sessions; // opened sessions map
+	
+	//private Map<String, Session> sessions; // opened sessions map
+	 
+	public static final String CACHE_NAME = CollaborationEndpoint.class.getName();
+	@SuppressWarnings("rawtypes")
+	private static PortalCache portalCache = MultiVMPoolUtil.getPortalCache(CACHE_NAME);
+	
+	private static final String DUMP_MESSAGE = "dump";
+	private static final Log LOG = LogFactoryUtil.getLog(CollaborationEndpoint.class);
 	
 	public CollaborationEndpoint() {
 		super();
-		sessions = new ConcurrentHashMap<>();
+		//sessions = new ConcurrentHashMap<>();
 	}
 	
 	@Override
 	public void onOpen(Session session, EndpointConfig config) {
+		// connection url query string parameters map
 		Map<String, String[]> parameters = HttpUtil.getParameterMap(session.getQueryString());
+		// user parameters
 		String userId = parameters.get("userId")[0];
-		sessions.put(session.getId(), session);
+		String userImagePath = parameters.get("userImagePath")[0];
+		// currentUser {User}
+		User currentUser = WhiteboardUtil.getUser(Long.valueOf(userId));
+		// data maps
+		ConcurrentMap<String, UserData> loggedUserMap = getLoggedUsersMap();
+		ConcurrentMap<String, Session> sessions = getSessions();
 		
-		/* adds message handler on current opened session */
-		session.addMessageHandler(new MessageHandler.Whole<String>() {
+		String userName = "";
+		
+		if (sessions.get(session.getId()) == null && currentUser != null) {
+			if (currentUser == null || currentUser.isDefaultUser()) {
+                LOG.debug("This is guest user");
+                userName = LanguageUtil.get(LocaleUtil.getDefault(), WhiteboardUtil.GUEST_USER_NAME_LABEL);
+            } else {
+                userName = currentUser.getFullName();
+            }
+			sessions.put(session.getId(), session);
+			loggedUserMap.put(session.getId(), new UserData(userName, userImagePath));
+			
+			LOG.debug(String.format("User full name: %s, User image path: %s", userName, userImagePath));
+			
+			/* adds message handler on current opened session */
+			session.addMessageHandler(new MessageHandler.Whole<String>() {
 
-			@Override
-			public void onMessage(String text) {
-				broadcast(text, sessions);
+				@Override
+				public void onMessage(String text) {
+					onMessageHandler(text);
+				}
+
+			});
+		}
+	}
+	
+	private void onMessageHandler(String text) {
+		ConcurrentMap<String, JSONObject> whiteBoardDump = getWhiteBoardDump();
+		ConcurrentMap<String, UserData> loggedUserMap = getLoggedUsersMap();
+		ConcurrentMap<String, Session> sessions = getSessions();
+		
+		try {
+			JSONObject jsonMessage = JSONFactoryUtil.createJSONObject(text);
+			if (WhiteboardUtil.LOGIN.equals(jsonMessage.getString(WhiteboardUtil.TYPE))) {
+				JSONObject usersLoggedMessage = WhiteboardUtil.generateLoggedUsersJSON(loggedUserMap);
+                /* adds whiteboard dump to the message */
+                usersLoggedMessage.put(DUMP_MESSAGE, WhiteboardUtil.loadWhiteboardDump(whiteBoardDump));
+                broadcast(usersLoggedMessage.toString(), sessions);
 			}
-
-		});
+			broadcast(text, sessions);
+		} catch (JSONException e) {
+			LOG.debug("JSON parse failed");
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
 	public void onClose(Session session, CloseReason closeReason) {
 		super.onClose(session, closeReason);
-		sessions.remove(session.getId()); // gets rid from the sessions map of current session
+		ConcurrentMap<String, UserData> loggedUserMap = getLoggedUsersMap();
+		ConcurrentMap<String, Session> sessions = getSessions();
+		
+		loggedUserMap.remove(session.getId()); // gets rid from the sessions users info map
+		sessions.remove(session.getId()); // gets rid from the sessions map
 	}
 	
 	/**
@@ -69,5 +134,38 @@ public class CollaborationEndpoint extends Endpoint {
 			throw new RuntimeException(ioe);
 		}
 	}
+	
+	@SuppressWarnings("unchecked")
+	private ConcurrentMap<String, UserData> getLoggedUsersMap() {
+        Object object = portalCache.get(WhiteboardUtil.LOGGED_USERS_MAP_KEY);
+        ConcurrentMap<String, UserData> loggedUserMap = (ConcurrentMap<String, UserData>) object;
+        if (null == loggedUserMap) {
+            loggedUserMap = new ConcurrentSkipListMap<String, UserData>();
+            portalCache.put(WhiteboardUtil.LOGGED_USERS_MAP_KEY, loggedUserMap);
+        }
+        return loggedUserMap;
+    }
+	
+	@SuppressWarnings("unchecked")
+    private ConcurrentMap<String, JSONObject> getWhiteBoardDump() {
+        Object object = portalCache.get(WhiteboardUtil.WHITEBOARD_DUMP_KEY);
+        ConcurrentMap<String, JSONObject> whiteBoardDump = (ConcurrentMap<String, JSONObject>) object;
+        if (null == whiteBoardDump) {
+            whiteBoardDump = new ConcurrentSkipListMap<String, JSONObject>();
+            portalCache.put(WhiteboardUtil.WHITEBOARD_DUMP_KEY, whiteBoardDump);
+        }
+        return whiteBoardDump;
+    }
+	
+	@SuppressWarnings("unchecked")
+    private ConcurrentMap<String, Session> getSessions() {
+        Object object = portalCache.get(WhiteboardUtil.WHITEBOARD_SESSIONS_KEY);
+        ConcurrentMap<String, Session> sessions = (ConcurrentMap<String, Session>) object;
+        if (null == sessions) {
+        	sessions = new ConcurrentSkipListMap<String, Session>();
+            portalCache.put(WhiteboardUtil.WHITEBOARD_SESSIONS_KEY, sessions);
+        }
+        return sessions;
+    }
 
 }
