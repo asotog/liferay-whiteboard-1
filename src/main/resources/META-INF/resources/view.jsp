@@ -22,7 +22,7 @@
     <div class="user-modification-tooltips">
     </div>
     <menu>
-        <div class="btn-group btn-group-vertical">
+        <div class="btn-group-vertical">
             <button class="btn add" data-shape="rectangle" title='<liferay-ui:message key="rivetlogic.whiteboard.shapes.rectangle.title"/>'><span></span></button>
             <button class="btn add" data-shape="line" title='<liferay-ui:message key="rivetlogic.whiteboard.shapes.line.title"/>'><span></span></button>
             <button class="btn add" data-shape="circle" title='<liferay-ui:message key="rivetlogic.whiteboard.shapes.circle.title"/>'><span></span></button>
@@ -85,7 +85,7 @@
         </div>
 
     </menu>
-    <canvas id="editor-canvas" height="500"></canvas>
+    <canvas id="editor-canvas" height="600"></canvas>
     <div class="text-editor hidden">
         <textarea class="text"></textarea>
         <button class="btn btn-primary edit"><liferay-ui:message key="rivetlogic.whiteboard.canvas.edit"/></button>
@@ -94,7 +94,7 @@
 </div>
 
 <script id="users-online-template" type="text/x-handlebars-template">
-    <ul class="unstyled">
+    <ul class="list-unstyled">
         {{#each users}}
         <li><img src="{{userImagePath}}"/><span>{{userName}}</span></li>
         {{/each}}
