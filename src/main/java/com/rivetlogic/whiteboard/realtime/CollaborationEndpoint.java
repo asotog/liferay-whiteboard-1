@@ -42,7 +42,7 @@ public class CollaborationEndpoint extends Endpoint {
 	@SuppressWarnings("rawtypes")
 	private static PortalCache portalCache = MultiVMPoolUtil.getPortalCache(CACHE_NAME);
 	
-	private static final String DUMP_MESSAGE = "dump";
+	private static final String DUMP_MESSAGE = "dump"; // a dump messsage is when new user comes and needs to receive the current whiteboard shapes created/stored
 	private static final Log LOG = LogFactoryUtil.getLog(CollaborationEndpoint.class);
 	
 	public CollaborationEndpoint() {
@@ -57,6 +57,7 @@ public class CollaborationEndpoint extends Endpoint {
 		// user parameters
 		String userId = parameters.get("userId")[0];
 		String userImagePath = parameters.get("userImagePath")[0];
+		String guestLabel = parameters.get("guestLabel")[0];
 		// currentUser {User}
 		User currentUser = WhiteboardUtil.getUser(Long.valueOf(userId));
 		// data maps
@@ -68,7 +69,7 @@ public class CollaborationEndpoint extends Endpoint {
 		if (sessions.get(session.getId()) == null && currentUser != null) {
 			if (currentUser == null || currentUser.isDefaultUser()) {
                 LOG.debug("This is guest user");
-                userName = LanguageUtil.get(LocaleUtil.getDefault(), WhiteboardUtil.GUEST_USER_NAME_LABEL);
+                userName = guestLabel;
             } else {
                 userName = currentUser.getFullName();
             }

@@ -33,6 +33,8 @@ AUI.add('whiteboard', function (A, NAME) {
 	var SELECTOR_FREE = '.free';
 	var SELECTOR_CLEAN = '.clean';
 	var SELECTOR_DROPDOWN = '.dropdown-menu';
+	
+    var strings = window.CollaborationWhiteboardPortlet.strings;
     
     var EditorManager = A.Base.create('whiteboard', A.Base, [A.TextEditor], {
         
@@ -143,14 +145,14 @@ AUI.add('whiteboard', function (A, NAME) {
             menu.one(SELECTOR_DELETE).on('click', function (e) {
                 if (instance.get(SELECTED_SHAPE)) {
                     var selectedShape = instance.get(SELECTED_SHAPE);
-                    instance.showConfirmMessage(Liferay.Language.get('rivetlogic.whiteboard.confirm.deleteshapepopup.title'),
-                                            Liferay.Language.get('rivetlogic.whiteboard.confirm.deleteshapepopup.message'), function() {
+                    instance.showConfirmMessage(strings['rivetlogic.whiteboard.confirm.deleteshapepopup.title'],
+                                            strings['rivetlogic.whiteboard.confirm.deleteshapepopup.message'], function() {
                         selectedShape.remove();
                     });
                 }
                 instance.retrieveGroupedShapes(function(shapes) {
-                    instance.showConfirmMessage(Liferay.Language.get('rivetlogic.whiteboard.confirm.deleteagrouppopup.title'),
-                                            Liferay.Language.get('rivetlogic.whiteboard.confirm.deleteagrouppopup.message'), function() {
+                    instance.showConfirmMessage(strings['rivetlogic.whiteboard.confirm.deleteagrouppopup.title'],
+                                            strings['rivetlogic.whiteboard.confirm.deleteagrouppopup.message'], function() {
                         instance.get(CANVAS).getActiveGroup().forEachObject(function(shape){
                             instance.get(CANVAS).remove(shape);
                         });
@@ -161,8 +163,8 @@ AUI.add('whiteboard', function (A, NAME) {
             
             /* clean button */
             menu.one(SELECTOR_CLEAN).on('click', function (e) {
-                instance.showConfirmMessage(Liferay.Language.get('rivetlogic.whiteboard.confirm.deleteallpopup.title'),
-                                            Liferay.Language.get('rivetlogic.whiteboard.confirm.deleteallpopup.message'), function() {
+                instance.showConfirmMessage(strings['rivetlogic.whiteboard.confirm.deleteallpopup.title'],
+                                            strings['rivetlogic.whiteboard.confirm.deleteallpopup.message'], function() {
                     instance.deleteAllShapes();
                     instance.get(CANVAS).discardActiveGroup().renderAll();
                 });
@@ -231,8 +233,8 @@ AUI.add('whiteboard', function (A, NAME) {
                     '<button class="btn btn-primary" type="button">{confirm}</button>' + 
                     '<button class="btn cancel" type="button">{cancel}</button>' +
                 '</p>';
-                buttonsTpl = A.Lang.sub(buttonsTpl, {confirm: Liferay.Language.get('rivetlogic.whiteboard.confirm.label'), 
-                                                     cancel: Liferay.Language.get('rivetlogic.whiteboard.cancel.label') });
+                buttonsTpl = A.Lang.sub(buttonsTpl, {confirm: strings['rivetlogic.whiteboard.confirm.label'], 
+                                                     cancel: strings['rivetlogic.whiteboard.cancel.label'] });
                 this.confirmMessage = new A.Modal({
                     bodyContent: '',
                     centered: true,

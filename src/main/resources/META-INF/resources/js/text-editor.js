@@ -26,6 +26,8 @@ YUI.add('text-editor', function (Y, NAME) {
     var SELECTOR_TEXT = '.text';
     var TEXT_EDITOR_HEADER_LABEL = 'rivetlogic.whiteboard.edit.text';
     
+    var strings = window.CollaborationWhiteboardPortlet.strings;
+    
     var TextEditor = Y.Base.create('text-editor', Y.Base, [], {
         
         initializer: function () {
@@ -38,7 +40,7 @@ YUI.add('text-editor', function (Y, NAME) {
                 visible: false,
                 modal: true
             }).render();
-            panel.set('headerContent', Liferay.Language.get(TEXT_EDITOR_HEADER_LABEL));
+            panel.set('headerContent', strings[TEXT_EDITOR_HEADER_LABEL]);
             panel.get('boundingBox').one('.modal-body').append(this.get(TEXT_EDITOR_NODE));
             this.get(TEXT_EDITOR_NODE).removeClass('hidden');
             this.set(TEXT_EDITOR, panel);

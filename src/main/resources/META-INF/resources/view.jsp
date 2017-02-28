@@ -5,8 +5,24 @@
  String websocketURL = "ws://" + request.getServerName() + ":" + request.getServerPort() + CollaborationEndpoint.PATH;
  websocketURL = HttpUtil.addParameter(websocketURL, "userId", user.getUserId());
  websocketURL = HttpUtil.addParameter(websocketURL, "userImagePath", userImagePath);
+ websocketURL = HttpUtil.addParameter(websocketURL, "guestLabel",  LanguageUtil.get(request, "rivetlogic.whiteboard.guest.name.label"));
 %>
-
+<script>
+window.CollaborationWhiteboardPortlet = {
+	strings: {
+		'rivetlogic.whiteboard.confirm.deleteallpopup.title': '<liferay-ui:message key="rivetlogic.whiteboard.confirm.deleteallpopup.title"/>',	
+		'rivetlogic.whiteboard.confirm.deleteallpopup.message': '<liferay-ui:message key="rivetlogic.whiteboard.confirm.deleteallpopup.message"/>',
+		'rivetlogic.whiteboard.confirm.deleteshapepopup.title': '<liferay-ui:message key="rivetlogic.whiteboard.confirm.deleteshapepopup.title"/>',
+		'rivetlogic.whiteboard.confirm.deleteshapepopup.message': '<liferay-ui:message key="rivetlogic.whiteboard.confirm.deleteshapepopup.message"/>',
+		'rivetlogic.whiteboard.confirm.deleteagrouppopup.title': '<liferay-ui:message key="rivetlogic.whiteboard.confirm.deleteagrouppopup.title"/>',
+		'rivetlogic.whiteboard.confirm.deleteagrouppopup.message': '<liferay-ui:message key="rivetlogic.whiteboard.confirm.deleteagrouppopup.message"/>',
+		'rivetlogic.whiteboard.edit.text': '<liferay-ui:message key="rivetlogic.whiteboard.edit.text"/>',
+		'rivetlogic.whiteboard.confirm.label': '<liferay-ui:message key="rivetlogic.whiteboard.confirm.label"/>',
+		'rivetlogic.whiteboard.cancel.label': '<liferay-ui:message key="rivetlogic.whiteboard.cancel.label"/>',
+		'rivetlogic.whiteboard.guest.name.label': '<liferay-ui:message key="rivetlogic.whiteboard.guest.name.label"/>'
+	}
+};
+</script>
 <aui:script use="collaboration-whiteboard-portlet">
 	A.CollaborationWhiteboardPortlet.init("<%= websocketURL %>");
 </aui:script>
@@ -92,7 +108,6 @@
         <button class="btn cancel"><liferay-ui:message key="rivetlogic.whiteboard.canvas.cancel"/></button>
     </div>
 </div>
-
 <script id="users-online-template" type="text/x-handlebars-template">
     <ul class="list-unstyled">
         {{#each users}}
