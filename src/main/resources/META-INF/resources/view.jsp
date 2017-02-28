@@ -1,7 +1,7 @@
 <%@ include file="/init.jsp" %>
 
 <%
- String userImagePath = HtmlUtil.escape(user.getPortraitURL(themeDisplay));
+ String userImagePath = user.getPortraitURL(themeDisplay);
  String websocketURL = "ws://" + request.getServerName() + ":" + request.getServerPort() + CollaborationEndpoint.PATH;
  websocketURL = HttpUtil.addParameter(websocketURL, "userId", user.getUserId());
  websocketURL = HttpUtil.addParameter(websocketURL, "userImagePath", userImagePath);
