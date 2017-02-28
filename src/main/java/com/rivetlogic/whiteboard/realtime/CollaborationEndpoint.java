@@ -101,8 +101,14 @@ public class CollaborationEndpoint extends Endpoint {
                 /* adds whiteboard dump to the message */
                 usersLoggedMessage.put(DUMP_MESSAGE, WhiteboardUtil.loadWhiteboardDump(whiteBoardDump));
                 broadcast(usersLoggedMessage.toString(), sessions);
+			} else {
+				/* just broadcast the message */
+                LOG.debug("Broadcasting = " + text);
+                /* adds whiteboard updates to the dump */
+                WhiteboardUtil.persistWhiteboardDump(whiteBoardDump, jsonMessage);
+				broadcast(text, sessions);
 			}
-			broadcast(text, sessions);
+			
 		} catch (JSONException e) {
 			LOG.debug("JSON parse failed");
 			e.printStackTrace();
@@ -117,6 +123,8 @@ public class CollaborationEndpoint extends Endpoint {
 		
 		loggedUserMap.remove(session.getId()); // gets rid from the sessions users info map
 		sessions.remove(session.getId()); // gets rid from the sessions map
+		
+		broadcast(WhiteboardUtil.generateLoggedUsersJSON(loggedUserMap).toString(), sessions);
 	}
 	
 	/**

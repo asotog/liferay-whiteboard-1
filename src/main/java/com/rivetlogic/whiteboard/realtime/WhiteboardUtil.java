@@ -106,6 +106,67 @@ public class WhiteboardUtil {
 
     }
     
+    /**
+     * Persists whiteboard state, so if new users join the whiteboard, they can
+     * use the dump to initialize the whiteboard with the shapes previously
+     * created.
+     * 
+     * @param whiteBoardDump
+     * @param jsonMessage
+     */
+    public static void persistWhiteboardDump(ConcurrentMap<String, JSONObject> whiteBoardDump, JSONObject jsonMessage) {
+
+        if (jsonMessage.getJSONArray(COMMANDS) != null) {
+            JSONArray messageCommands = jsonMessage.getJSONArray(COMMANDS);
+            int commandsLength = messageCommands.length();
+            for (int i = 0; i < commandsLength; i++) {
+                JSONObject command = messageCommands.getJSONObject(i);
+
+                if (!command.getString(ACTION).equals(USERS) && !command.getString(ACTION).equals(TOOLTIP)) {
+                    /* if action is a delete command, removes entry from dump */
+                    if (command.getString(ACTION).equals(DELETE)) {
+                        whiteBoardDump.remove(command.getString(CACHEID));
+                    } else {
+                        /*
+                         * if shape already exists in dump map re sets the map
+                         * entry
+                         */
+                        if (whiteBoardDump.get(command.getString(CACHEID)) != null) {
+                            JSONObject cachedCommand = whiteBoardDump.get(command.getString(CACHEID));
+                            if (command.getString(TYPE).equals(LINE)) {
+
+                                cachedCommand.getJSONObject(STATE).put(OPTIONS, command.getJSONObject(STATE));
+
+                            } else if (command.getString(TYPE).equals(CIRCLE)) {
+
+                                cachedCommand.put(STATE, command.getJSONObject(STATE));
+                                cachedCommand.getJSONObject(STATE).put(RADIUS, CIRCLE_RADIUS);
+
+                            } else if (command.getString(TYPE).equals(PATH)) {
+
+                                cachedCommand.getJSONObject(STATE).put(OPTIONS,
+                                        command.getJSONObject(STATE).getJSONObject(OPTIONS));
+
+                            } else {
+
+                                cachedCommand.put(STATE, command.getJSONObject(STATE));
+
+                            }
+                            command = cachedCommand;
+                        }
+                        whiteBoardDump.put(command.getString(CACHEID), command);
+                    }
+                }
+            }
+        }
+    }
+    
+    /**
+     * Gets Liferay User by userId
+     * 
+     * @param userId {long}
+     * @return User
+     */
     public static User getUser(long userId) {
     	try {
 			return UserLocalServiceUtil.getUser(Long.valueOf(userId));
