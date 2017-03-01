@@ -228,35 +228,44 @@ AUI.add('whiteboard', function (A, NAME) {
          */ 
         showConfirmMessage: function(title, message, confirmationCallback) {
             var instance = this;
+            var setModal = function() {
+            	instance.confirmMessage.set('headerContent', title);
+            	instance.confirmMessage.get('boundingBox').one('.message').set('text', message);
+            	instance.confirmMessage.get('boundingBox').one('.btn-primary').once('click', function() {
+            		instance.confirmMessage.hide();
+                    confirmationCallback();
+                });
+            	instance.confirmMessage.get('boundingBox').one('.cancel').once('click', function() {
+                    instance.confirmMessage.hide();
+                });
+            	instance.confirmMessage.show();
+            	instance.confirmMessage.align();
+            }
+            
             if (!this.confirmMessage) {
-                var buttonsTpl = '<p class="whiteboard-btn-group">' + 
+                var buttonsTpl = '<p class="whiteboard-btn-group text-center">' + 
                     '<button class="btn btn-primary" type="button">{confirm}</button>' + 
                     '<button class="btn cancel" type="button">{cancel}</button>' +
                 '</p>';
                 buttonsTpl = A.Lang.sub(buttonsTpl, {confirm: strings['rivetlogic.whiteboard.confirm.label'], 
                                                      cancel: strings['rivetlogic.whiteboard.cancel.label'] });
-                this.confirmMessage = new A.Modal({
-                    bodyContent: '',
-                    centered: true,
-                    modal: true,
-                    headerContent: '',
-                    visible: false,
-                    width: 330,
-                    zIndex: Liferay.zIndex.TOOLTIP
-                }).render();
-                this.confirmMessage.get('boundingBox').one('.modal-body').append('<div class="message"></div>');
-                this.confirmMessage.get('boundingBox').one('.modal-body').append(buttonsTpl);
+                
+                Liferay.Util.openWindow({
+                	dialog: {
+                		bodyContent: '',
+                    	headerContent: '',
+                    	width: 330,
+                    	height: 'auto',
+                    	visible: false
+                	}
+                }, function(dialog) {
+                	instance.confirmMessage = dialog;
+                	instance.confirmMessage.get('boundingBox').one('.modal-body').append('<div class="message text-center"></div>');
+                	instance.confirmMessage.get('boundingBox').one('.modal-body').append(buttonsTpl);
+                	setModal();
+                });
             }
-            this.confirmMessage.set('headerContent', title);
-            this.confirmMessage.get('boundingBox').one('.message').set('text', message);
-            this.confirmMessage.get('boundingBox').one('.btn-primary').once('click', function() {
-                instance.confirmMessage.hide();
-                confirmationCallback();
-            });
-            this.confirmMessage.get('boundingBox').one('.cancel').once('click', function() {
-                instance.confirmMessage.hide();
-            });
-            this.confirmMessage.show();
+            setModal();
         },
         
         /**
