@@ -87,6 +87,11 @@ AUI.add('multiuser-whiteboard', function (A, NAME) {
                 websocket.send(instance.stringifyCommands()); /* stringify not supported on old browsers */
                 instance.set(COMMANDS, []);
             }, MultiuserEditor.CONSTANTS.BROADCAST_INTERVAL);
+            // when SPA (single page app) navigation is configured
+            // need to listen beforeNavigate event to manually close connection
+            Liferay.on('beforeNavigate', function(event) {
+            	websocket.close();
+            });
         },
         
         /**
