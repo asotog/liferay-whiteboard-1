@@ -15,36 +15,39 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 AUI.add('collaboration-whiteboard-portlet', function (A, NAME) {
-	
-	A.CollaborationWhiteboardPortlet = {};
-	
-	/**
-	 * Inits whiteboard portlet
-	 * @param url {String} Websocket endpoint url
-	 */
-	A.CollaborationWhiteboardPortlet.init = function(url) {
-		
-		var SELECTOR_WHITEBOARD_PORTLET = '.whiteboard-portlet';
-    	var SELECTOR_CANVAS = 'canvas';
-    	var SELECTOR_EDITOR = '.editor';
-    	var SELECTOR_CONNECTION_LOST_MESSAGE = '.connection-lost-alert';
-    	var SELECTOR_CONNECTION_UNSUPPORTED_MESSAGE = '.communication-unsupported-alert';
-    	var SELECTOR_TEXT_EDITOR = '.text-editor';
-    	var SELECTOR_ONLINE_USERS_TEMPLATE = '#users-online-template';
-    	var SELECTOR_USER_TOOLTIPS_TEMPLATE = '#user-tooltips-template';
-    	var CANVAS_NAME = 'editor-canvas';
-    	var SPACE = ' ';
-    	var DASH = '-';
-    	
+
+    A.CollaborationWhiteboardPortlet = {};
+
+    /**
+     * Inits whiteboard portlet
+     * @param url {String} Websocket endpoint url
+     */
+    A.CollaborationWhiteboardPortlet.init = function (url) {
+
+        var SELECTOR_WHITEBOARD_PORTLET = '.whiteboard-portlet';
+        var SELECTOR_CANVAS = 'canvas';
+        var SELECTOR_EDITOR = '.editor';
+        var SELECTOR_CONNECTION_LOST_MESSAGE = '.connection-lost-alert';
+        var SELECTOR_CONNECTION_UNSUPPORTED_MESSAGE = '.communication-unsupported-alert';
+        var SELECTOR_TEXT_EDITOR = '.text-editor';
+        var SELECTOR_ONLINE_USERS_TEMPLATE = '#users-online-template';
+        var SELECTOR_USER_TOOLTIPS_TEMPLATE = '#user-tooltips-template';
+        var CANVAS_NAME = 'editor-canvas';
+        var SPACE = ' ';
+        var DASH = '-';
+
         var containerWidth = A.one(SELECTOR_WHITEBOARD_PORTLET + SPACE + SELECTOR_EDITOR).get('offsetWidth');
         A.one(SELECTOR_WHITEBOARD_PORTLET + SPACE + SELECTOR_CANVAS).setAttribute('width', containerWidth);
-        
+
         var canvas = new fabric.Canvas(CANVAS_NAME);
-        A.on(['orientationchange', 'resize'], function(e) {
+        A.on(['orientationchange', 'resize'], function (e) {
             containerWidth = A.one(SELECTOR_WHITEBOARD_PORTLET + SPACE + SELECTOR_EDITOR).get('offsetWidth');
-            canvas.setDimensions({width: containerWidth, height: 600 });
+            canvas.setDimensions({
+                width: containerWidth,
+                height: 600
+            });
         });
-        
+
         var editor = new A.MultiuserEditor({
             canvas: canvas,
             websocketAddress: url,
@@ -54,20 +57,21 @@ AUI.add('collaboration-whiteboard-portlet', function (A, NAME) {
             onlineUsersTemplate: A.one(SELECTOR_ONLINE_USERS_TEMPLATE).get('innerHTML'),
             usersTooltipsTemplate: A.one(SELECTOR_USER_TOOLTIPS_TEMPLATE).get('innerHTML'),
             baseImagePath: Liferay.ThemeDisplay.getPathImage(),
-            userName: (Liferay.ThemeDisplay.getUserName() != '') ? Liferay.ThemeDisplay.getUserName() : 'Guest', /* for user tooltip */
+            userName: (Liferay.ThemeDisplay.getUserName() != '') ? Liferay.ThemeDisplay.getUserName() : 'Guest',
+            /* for user tooltip */
             userImagePath: A.one('.whiteboard-portlet .profile-image-path').get('value') /* for user tooltip */
-        });   
-        
-        editor.on('connectionClosed', function() { 
-        	A.one(SELECTOR_WHITEBOARD_PORTLET).one(SELECTOR_CONNECTION_LOST_MESSAGE).removeClass('hidden');
+        });
+
+        editor.on('connectionClosed', function () {
+            A.one(SELECTOR_WHITEBOARD_PORTLET).one(SELECTOR_CONNECTION_LOST_MESSAGE).removeClass('hidden');
         });
         // if multi user communication not supported by current browser we let know the user about the issue
-        if (!editor.supported) { 
-        	A.one(SELECTOR_WHITEBOARD_PORTLET).one(SELECTOR_CONNECTION_UNSUPPORTED_MESSAGE).removeClass('hidden');
+        if (!editor.supported) {
+            A.one(SELECTOR_WHITEBOARD_PORTLET).one(SELECTOR_CONNECTION_UNSUPPORTED_MESSAGE).removeClass('hidden');
         };
-        
-	}
-	
+
+    }
+
 }, '', {
     "requires": ['multiuser-whiteboard', 'fabricjs']
 });

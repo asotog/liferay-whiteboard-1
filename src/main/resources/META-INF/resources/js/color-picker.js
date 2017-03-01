@@ -16,7 +16,7 @@
  */
 
 YUI.add('color-picker', function (Y, NAME) {
-	
+
     var EVT_COLOR_CHANGE = 'color-picker:change';
     var CONTAINER = 'container';
     var SELECTOR_COLOR_PICKER_CONTAINER = '.color-picker-container';
@@ -28,7 +28,7 @@ YUI.add('color-picker', function (Y, NAME) {
     var SELECTOR_OPACITY = 'select';
     var SELECTOR_COLOR = '.color';
     var SPACE = ' ';
-    
+
     var ColorPicker = Y.Base.create('color-picker', Y.Base, [], {
         hue: null,
         sat: null,
@@ -38,24 +38,24 @@ YUI.add('color-picker', function (Y, NAME) {
         lumValue: null,
         opacity: null,
         sample: null,
-        
+
         initializer: function () {
             this.bindUI();
         },
-        
+
         bindUI: function () {
             var instance = this;
             var colorPickerContainer = this.get(CONTAINER).one(SELECTOR_COLOR_PICKER_CONTAINER);
             colorPickerContainer.removeClass('hidden');
             this.sample = this.get(CONTAINER).one(SELECTOR_SAMPLE);
-            this.sample.on('click', function(e) {
+            this.sample.on('click', function (e) {
                 colorPickerContainer.removeClass('hidden');
             });
-            this.get(CONTAINER).one(SELECTOR_CLOSE_PICKER).on('click', function(e) {
+            this.get(CONTAINER).one(SELECTOR_CLOSE_PICKER).on('click', function (e) {
                 e.preventDefault();
                 colorPickerContainer.addClass('hidden');
             });
-            
+
             this.hue = new Y.Dial({
                 min: 0,
                 max: 360,
@@ -76,32 +76,32 @@ YUI.add('color-picker', function (Y, NAME) {
                 value: 50,
                 render: this.get(CONTAINER).one(SELECTOR_LUM_SLIDER)
             });
-            
+
             this.satValue = this.get(CONTAINER).one(SELECTOR_SAT_SLIDER + SPACE + 'span');
             this.lumValue = this.get(CONTAINER).one(SELECTOR_LUM_SLIDER + SPACE + 'span');
             this.opacity = this.get(CONTAINER).one(SELECTOR_OPACITY);
             this.color = this.get(CONTAINER).one(SELECTOR_COLOR);
-            
-            this.hue.after('valueChange', function(e) {
-                instance.updatePickerUI();
-            });
-            
-            this.sat.after('thumbMove', function(e) {
+
+            this.hue.after('valueChange', function (e) {
                 instance.updatePickerUI();
             });
 
-            this.lum.after('thumbMove', function(e) {
+            this.sat.after('thumbMove', function (e) {
+                instance.updatePickerUI();
+            });
+
+            this.lum.after('thumbMove', function (e) {
                 instance.updatePickerUI();
             });
             if (this.opacity) {
-                this.opacity.on('change', function() {
+                this.opacity.on('change', function () {
                     instance.updatePickerUI();
                 });
             }
             colorPickerContainer.addClass('hidden');
         },
-        
-        updatePickerUI: function() {
+
+        updatePickerUI: function () {
             var h = this.hue.get('value'),
                 s = this.sat.get('value'),
                 l = this.lum.get('value'),
@@ -116,11 +116,13 @@ YUI.add('color-picker', function (Y, NAME) {
                 rgbFormattedColor = Y.Color.toRGB(hslString);
             }
             hexString = Y.Color.toHex(hslString);
-            
+
             this.satValue.set('text', s + '%');
             this.lumValue.set('text', l + '%');
 
-            this.fire(EVT_COLOR_CHANGE, {color: rgbFormattedColor})
+            this.fire(EVT_COLOR_CHANGE, {
+                color: rgbFormattedColor
+            })
             this.color.setStyle('backgroundColor', rgbFormattedColor);
             this.sample.setStyle('backgroundColor', rgbFormattedColor);
 
@@ -128,18 +130,18 @@ YUI.add('color-picker', function (Y, NAME) {
 
     }, {
         ATTRS: {
-            
+
             container: {
                 value: null
             },
-            
+
             trigger: {
                 value: '.color-picker-btn'
             }
-            
+
         }
     });
-    
+
 
     Y.ColorPicker = ColorPicker;
 

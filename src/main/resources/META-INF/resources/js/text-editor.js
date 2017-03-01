@@ -16,20 +16,20 @@
  */
 
 YUI.add('text-editor', function (Y, NAME) {
-    
+
     var EVT_TEXT_EDITED = 'text-editor:textedited';
     var CURRENT_TEXT_COMPONENT = 'currentTextComponent';
-    var TEXT_EDITOR_NODE =  'textEditorNode';
+    var TEXT_EDITOR_NODE = 'textEditorNode';
     var TEXT_EDITOR = 'textEditor';
     var SELECTOR_CANCEL_BUTTON = '.cancel';
     var SELECTOR_EDIT_BUTTON = '.edit';
     var SELECTOR_TEXT = '.text';
     var TEXT_EDITOR_HEADER_LABEL = 'rivetlogic.whiteboard.edit.text';
-    
+
     var strings = window.CollaborationWhiteboardPortlet.strings;
-    
+
     var TextEditor = Y.Base.create('text-editor', Y.Base, [], {
-        
+
         initializer: function () {
             var panel = new Y.Modal({
                 headerContent: '',
@@ -46,25 +46,25 @@ YUI.add('text-editor', function (Y, NAME) {
             this.set(TEXT_EDITOR, panel);
             this.bindTextEditor();
         },
-        
-        bindTextEditor: function() {
+
+        bindTextEditor: function () {
             var instance = this;
-            this.get(TEXT_EDITOR_NODE).one(SELECTOR_CANCEL_BUTTON).on('click', function() {
+            this.get(TEXT_EDITOR_NODE).one(SELECTOR_CANCEL_BUTTON).on('click', function () {
                 instance.get(TEXT_EDITOR).hide();
             });
-            this.get(TEXT_EDITOR_NODE).one(SELECTOR_EDIT_BUTTON).on('click', function() {
+            this.get(TEXT_EDITOR_NODE).one(SELECTOR_EDIT_BUTTON).on('click', function () {
                 instance.get(CURRENT_TEXT_COMPONENT).setText(instance.get(TEXT_EDITOR_NODE).one(SELECTOR_TEXT).get('value'));
                 instance.get(CURRENT_TEXT_COMPONENT).fire('modified');
                 instance.fire(EVT_TEXT_EDITED);
                 instance.get(TEXT_EDITOR).hide();
             });
         },
-        
+
         /**
          * Shows the text editor popup, called outside of this class
          * 
          */
-        editText: function(textComponent) {
+        editText: function (textComponent) {
             this.set(CURRENT_TEXT_COMPONENT, textComponent);
             this.get(TEXT_EDITOR).show();
             this.get(TEXT_EDITOR_NODE).one(SELECTOR_TEXT).set('value', textComponent.text);

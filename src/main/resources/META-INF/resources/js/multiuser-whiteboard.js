@@ -16,10 +16,10 @@
  */
 
 AUI.add('multiuser-whiteboard', function (A, NAME) {
-        
+
     var onlineUsersTemplateFn = null;
     var usersTooltipsTemplateFn = null;
-    
+
     var CONTAINER = 'container';
     var COMMANDS = 'commands';
     var COMM = 'comm';
@@ -27,44 +27,44 @@ AUI.add('multiuser-whiteboard', function (A, NAME) {
     var EDITOR_ID = 'editorId';
     var SELECTOR_USERS_ONLINE = '.users-online';
     var SELECTOR_USER_MOD_TOOLTIPS = '.user-modification-tooltips';
-    
+
     var MultiuserEditor = A.Base.create('multiuser-whiteboard', A.EditorManager, [], {
-        
-    	supported: true, // flag set after verification is current browser is supported
-    	
+
+        supported: true, // flag set after verification is current browser is supported
+
         disconnectedModalMessage: null,
-        
+
         initializer: function () {
             var instance = this;
-            
+
             onlineUsersTemplateFn = A.Handlebars.compile(this.get('onlineUsersTemplate'));
             usersTooltipsTemplateFn = A.Handlebars.compile(this.get('usersTooltipsTemplate'));
-            
+
             this.bindCommEvents();
-            this.get(CONTAINER).one(SELECTOR_USERS_ONLINE + ' .expand-collapse-btn').on('click', function(e) {
-            	e.preventDefault();
+            this.get(CONTAINER).one(SELECTOR_USERS_ONLINE + ' .expand-collapse-btn').on('click', function (e) {
+                e.preventDefault();
                 instance.get(CONTAINER).one(SELECTOR_USERS_ONLINE + ' .expand-collapse-btn').toggleClass('selected');
                 instance.get(CONTAINER).one(SELECTOR_USERS_ONLINE + ' .users-online-wrapper').toggleClass('show');
             });
         },
-            
+
         bindCommEvents: function () {
-        	var instance = this;
+            var instance = this;
             if (!window.WebSocket) { // if websocket not supported from current browser
-            	instance.supported = false;
-            	return;
+                instance.supported = false;
+                return;
             };
             var websocket = new WebSocket(instance.get('websocketAddress'));
-            websocket.onopen = function(evt) {
-            	websocket.send(A.JSON.stringify({
-                    type:  MultiuserEditor.CONSTANTS.LOGIN
+            websocket.onopen = function (evt) {
+                websocket.send(A.JSON.stringify({
+                    type: MultiuserEditor.CONSTANTS.LOGIN
                 }));
             };
-            websocket.onclose = function(evt) {
-            	instance.fire('connectionClosed');
+            websocket.onclose = function (evt) {
+                instance.fire('connectionClosed');
             };
-            websocket.onmessage = function(event) {
-            	instance.processMessage(function(data) {
+            websocket.onmessage = function (event) {
+                instance.processMessage(function (data) {
                     instance.executeCommands(data.commands || []);
                     /* if user is currently joining the whiteboard, load the whiteboard  dump to show shapes previously created */
                     if (instance.get(JOINING)) {
@@ -73,8 +73,8 @@ AUI.add('multiuser-whiteboard', function (A, NAME) {
                     }
                 }, A.JSON.parse(event.data));
             };
-            websocket.onerror = function(evt) {
-            	console.error(evt);
+            websocket.onerror = function (evt) {
+                console.error(evt);
             };
             /* broadcast */
             window.setInterval(function () {
@@ -86,40 +86,43 @@ AUI.add('multiuser-whiteboard', function (A, NAME) {
             }, MultiuserEditor.CONSTANTS.BROADCAST_INTERVAL);
             // when SPA (single page app) navigation is configured
             // need to listen beforeNavigate event to manually close connection
-            Liferay.on('beforeNavigate', function(event) {
-            	websocket.close();
+            Liferay.on('beforeNavigate', function (event) {
+                websocket.close();
             });
         },
-        
+
         /**
          * Checks if message is not coming from the same client, if no, does not continue
          * 
          * 
          */
-        processMessage: function(callback, data) {
+        processMessage: function (callback, data) {
             if (data.editorId != this.get(EDITOR_ID)) {
                 callback(data);
             }
         },
-        
-        
+
+
         /**
          * Transforms commands and adds editor id to a json string
          * 
          * 
          */
-        stringifyCommands: function() {
+        stringifyCommands: function () {
             var commands = this.addUserTooltipCommand(this.get(COMMANDS));
-            return A.JSON.stringify({editorId: this.get(EDITOR_ID), commands: commands});
+            return A.JSON.stringify({
+                editorId: this.get(EDITOR_ID),
+                commands: commands
+            });
         },
-        
+
         /**
          * Add the last user interaction coords and username to the commands to be sent to the other users to
          * know which shapes are being modified and who is
          * 
          * 
          */
-        addUserTooltipCommand: function(commands) {
+        addUserTooltipCommand: function (commands) {
             if (commands.length > 0) {
                 var lastCommand = commands[commands.length - 1];
                 var state = lastCommand.state.top ? lastCommand.state : lastCommand.state.options;
@@ -136,7 +139,7 @@ AUI.add('multiuser-whiteboard', function (A, NAME) {
             }
             return commands;
         },
-        
+
         /**
          * Executes a list of commands at the same time
          * 
@@ -150,7 +153,7 @@ AUI.add('multiuser-whiteboard', function (A, NAME) {
                 }
                 /* if is no new shape, look the current shape reference from cache */
                 var cachedShape = this.getShapeFromCache(command.cacheId);
-                
+
                 if (command.action == A.EditorManager.CONSTANTS.MODIFY && cachedShape) {
                     this.get('canvas').discardActiveGroup();
                     this.modifyShape(command);
@@ -166,42 +169,49 @@ AUI.add('multiuser-whiteboard', function (A, NAME) {
                     this.get(CONTAINER).one(SELECTOR_USER_MOD_TOOLTIPS).empty();
                 }
                 if (command.action == MultiuserEditor.CONSTANTS.TOOLTIP) {
-                    var userTooltipNode = this.get(CONTAINER).one(SELECTOR_USER_MOD_TOOLTIPS+' #' + command.id);
+                    var userTooltipNode = this.get(CONTAINER).one(SELECTOR_USER_MOD_TOOLTIPS + ' #' + command.id);
                     if (userTooltipNode) {
-                        userTooltipNode.setStyles({top: command.top + 'px', left: command.left + 'px'}); 
+                        userTooltipNode.setStyles({
+                            top: command.top + 'px',
+                            left: command.left + 'px'
+                        });
                     } else {
-                        this.get(CONTAINER).one(SELECTOR_USER_MOD_TOOLTIPS).append(usersTooltipsTemplateFn(command)); 
-                        userTooltipNode = this.get(CONTAINER).one(SELECTOR_USER_MOD_TOOLTIPS+' #' + command.id);
+                        this.get(CONTAINER).one(SELECTOR_USER_MOD_TOOLTIPS).append(usersTooltipsTemplateFn(command));
+                        userTooltipNode = this.get(CONTAINER).one(SELECTOR_USER_MOD_TOOLTIPS + ' #' + command.id);
                     }
                     this.animateTooltip(userTooltipNode);
                 }
             }
         },
-        
+
         /**
          * Animates user tooltip when user is modifying something in the canvas, animation will be shown to other users looking the same shape
          * that is being modified
          * 
          */
-        animateTooltip: function(node) {
+        animateTooltip: function (node) {
             var animStart = new A.Anim({
                 node: node,
-                to: { opacity: 1 }
+                to: {
+                    opacity: 1
+                }
             });
             var animEnd = new A.Anim({
                 node: node,
-                to: { opacity: 0 }
+                to: {
+                    opacity: 0
+                }
             });
-            animStart.on('end', function() {
+            animStart.on('end', function () {
                 animEnd.run();
             });
-            
+
             animStart.run();
         }
-    
+
     }, {
         ATTRS: {
-            
+
             /**
              * Websocket address
              * 
@@ -209,7 +219,7 @@ AUI.add('multiuser-whiteboard', function (A, NAME) {
             websocketAddress: {
                 value: ''
             },
-            
+
             /**
              * Online users list html  template
              * 
@@ -217,7 +227,7 @@ AUI.add('multiuser-whiteboard', function (A, NAME) {
             onlineUsersTemplate: {
                 value: ''
             },
-            
+
             /**
              * Users tooltips to display which shapes the users are modifying
              * 
@@ -225,7 +235,7 @@ AUI.add('multiuser-whiteboard', function (A, NAME) {
             usersTooltipsTemplate: {
                 value: ''
             },
-            
+
             /**
              * When user is joining to the whiteboard communication
              * 
@@ -233,7 +243,7 @@ AUI.add('multiuser-whiteboard', function (A, NAME) {
             joining: {
                 value: true
             },
-            
+
             /**
              * Profile image path
              * 
@@ -241,7 +251,7 @@ AUI.add('multiuser-whiteboard', function (A, NAME) {
             baseImagePath: {
                 value: ''
             },
-            
+
             /**
              * Username and user image to be displayed to the other users in tooltips while editing the whiteboard
              * 
@@ -252,10 +262,10 @@ AUI.add('multiuser-whiteboard', function (A, NAME) {
             userImagePath: {
                 value: ''
             }
-            
+
         }
     });
-    
+
     MultiuserEditor.CONSTANTS = {
         BROADCAST_INTERVAL: 10, // millisecs interval used to send updates to the rest of connected editor clients, made as it to avoid performance issues,
         LOGIN: 'login',
@@ -263,7 +273,7 @@ AUI.add('multiuser-whiteboard', function (A, NAME) {
         TOOLTIP: 'tooltip'
     };
 
-    
+
     A.MultiuserEditor = MultiuserEditor;
 
 }, '@VERSION@', {
