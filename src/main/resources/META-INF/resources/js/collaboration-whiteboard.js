@@ -27,6 +27,8 @@ AUI.add('collaboration-whiteboard-portlet', function (A, NAME) {
 		var SELECTOR_WHITEBOARD_PORTLET = '.whiteboard-portlet';
     	var SELECTOR_CANVAS = 'canvas';
     	var SELECTOR_EDITOR = '.editor';
+    	var SELECTOR_CONNECTION_LOST_MESSAGE = '.connection-lost-alert';
+    	var SELECTOR_CONNECTION_UNSUPPORTED_MESSAGE = '.communication-unsupported-alert';
     	var SELECTOR_TEXT_EDITOR = '.text-editor';
     	var SELECTOR_ONLINE_USERS_TEMPLATE = '#users-online-template';
     	var SELECTOR_USER_TOOLTIPS_TEMPLATE = '#user-tooltips-template';
@@ -55,6 +57,14 @@ AUI.add('collaboration-whiteboard-portlet', function (A, NAME) {
             userName: (Liferay.ThemeDisplay.getUserName() != '') ? Liferay.ThemeDisplay.getUserName() : 'Guest', /* for user tooltip */
             userImagePath: A.one('.whiteboard-portlet .profile-image-path').get('value') /* for user tooltip */
         });   
+        
+        editor.on('connectionClosed', function() { 
+        	A.one(SELECTOR_WHITEBOARD_PORTLET).one(SELECTOR_CONNECTION_LOST_MESSAGE).removeClass('hidden');
+        });
+        // if multi user communication not supported by current browser we let know the user about the issue
+        if (!editor.supported) { 
+        	A.one(SELECTOR_WHITEBOARD_PORTLET).one(SELECTOR_CONNECTION_UNSUPPORTED_MESSAGE).removeClass('hidden');
+        };
         
 	}
 	

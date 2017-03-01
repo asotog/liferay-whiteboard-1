@@ -30,6 +30,8 @@ AUI.add('multiuser-whiteboard', function (A, NAME) {
     
     var MultiuserEditor = A.Base.create('multiuser-whiteboard', A.EditorManager, [], {
         
+    	supported: true, // flag set after verification is current browser is supported
+    	
         disconnectedModalMessage: null,
         
         initializer: function () {
@@ -44,20 +46,14 @@ AUI.add('multiuser-whiteboard', function (A, NAME) {
                 instance.get(CONTAINER).one(SELECTOR_USERS_ONLINE + ' .expand-collapse-btn').toggleClass('selected');
                 instance.get(CONTAINER).one(SELECTOR_USERS_ONLINE + ' .users-online-wrapper').toggleClass('show');
             });
-            this.disconnectedModalMessage = new A.Modal({
-                bodyContent: Liferay.Language.get('rivetlogic.whiteboard.connection.issues.message'),
-                centered: true,
-                headerContent: Liferay.Language.get('rivetlogic.whiteboard.message.title'),
-                modal: true,
-                visible: false,
-                width: 450,
-                zIndex: Liferay.zIndex.TOOLTIP
-            }).render();
         },
             
         bindCommEvents: function () {
         	var instance = this;
-            
+            if (!window.WebSocket) { // if websocket not supported from current browser
+            	instance.supported = false;
+            	return;
+            };
             var websocket = new WebSocket(instance.get('websocketAddress'));
             websocket.onopen = function(evt) {
             	websocket.send(A.JSON.stringify({
@@ -65,7 +61,7 @@ AUI.add('multiuser-whiteboard', function (A, NAME) {
                 }));
             };
             websocket.onclose = function(evt) {
-
+            	instance.fire('connectionClosed');
             };
             websocket.onmessage = function(event) {
             	instance.processMessage(function(data) {

@@ -27,8 +27,10 @@ window.CollaborationWhiteboardPortlet = {
 	A.CollaborationWhiteboardPortlet.init("<%= websocketURL %>");
 </aui:script>
 <input type="hidden" class="profile-image-path" value="<%=userImagePath %>"/>
+<div class="connection-lost-alert alert alert-danger hidden" role="alert">Connection was lost please refresh the page. <a href="javascript:document.location.reload()">Reload</a></div>
+<div class="communication-unsupported-alert alert alert-danger hidden" role="alert">Communication protocol not supported by your current browser. Please try <a href="http://caniuse.com/#search=websocket" target="_blank">supported</a> browser</div>
 <div class="editor">
-    <div class="users-online">
+	<div class="users-online">
         <a href="#" class="expand-collapse-btn"><i class="icon-user"></i> <span class="count"></span> <liferay-ui:message key="rivetlogic.whiteboard.users.online"/></a>
         <div class="users-online-wrapper">
             <header><h6><liferay-ui:message key="rivetlogic.whiteboard.users.header"/></h6></header>
