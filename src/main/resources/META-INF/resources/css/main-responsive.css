@@ -1,16 +1,16 @@
-
 /* users online list */
+
 @media screen and (max-width: 640px) {
 	.whiteboard-portlet .users-online .expand-collapse-btn {
-	  display: block;
+		display: block;
 	}
 	.whiteboard-portlet .users-online .expand-collapse-btn.selected {
-	  background: #D3D3D3;
+		background: #D3D3D3;
 	}
 	.whiteboard-portlet .users-online .users-online-wrapper {
-	  display: none;
+		display: none;
 	}
 	.whiteboard-portlet .users-online .users-online-wrapper.show {
-	  display: block;
+		display: block;
 	}
-}    
+}

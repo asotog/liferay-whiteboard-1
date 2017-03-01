@@ -24,8 +24,7 @@
     };
 </script>
 <aui:script use="collaboration-whiteboard-portlet">
-    A.CollaborationWhiteboardPortlet.init("
-    <%= websocketURL %>");
+    A.CollaborationWhiteboardPortlet.init("<%= websocketURL %>");
 </aui:script>
 <input type="hidden" class="profile-image-path" value="<%=userImagePath %>" />
 <div class="connection-lost-alert alert alert-danger hidden" role="alert">Connection was lost please refresh the page. <a href="javascript:document.location.reload()">Reload</a></div>
