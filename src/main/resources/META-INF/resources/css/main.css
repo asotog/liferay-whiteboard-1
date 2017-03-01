@@ -241,3 +241,7 @@
 .whiteboard-portlet .text-editor .yui3-widget-buttons {
     display: none;
 }
+
+.whiteboard-download-modal img {
+    max-width: 500px;	
+}

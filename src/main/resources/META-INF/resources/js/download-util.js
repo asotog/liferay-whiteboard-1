@@ -16,7 +16,9 @@
  */
 
 YUI.add('download-util', function (Y, NAME) {
-
+	
+	var strings = window.CollaborationWhiteboardPortlet.strings;
+	
     var EditorDownload = {
 
         /**
@@ -29,7 +31,7 @@ YUI.add('download-util', function (Y, NAME) {
                 bodyContent: ' ',
                 centered: true,
                 destroyOnHide: true,
-                headerContent: Liferay.Language.get('rivetlogic.whiteboard.download.downloadaction'),
+                headerContent: strings['rivetlogic.whiteboard.download.downloadaction'],
                 //height: 200,
                 modal: true,
                 render: 'body',
@@ -43,7 +45,7 @@ YUI.add('download-util', function (Y, NAME) {
 
             var imageData = canvas.toDataURL({
                 format: 'png',
-                multiplier: 4
+                multiplier: 1
             });
             EditorDownload._addImg(imageData, modal);
 
@@ -57,7 +59,7 @@ YUI.add('download-util', function (Y, NAME) {
                     }
                 }
             }, {
-                label: Liferay.Language.get('rivetlogic.whiteboard.download.downloadaction'),
+                label: strings['rivetlogic.whiteboard.download.downloadaction'],
                 icon: 'icon-download-alt',
                 on: {
                     click: function () {
@@ -79,8 +81,8 @@ YUI.add('download-util', function (Y, NAME) {
          */
         _addImg: function (data, modal) {
             var img = Y.Node.create('<img/>');
-            img.setAttribute('src', data)
-
+            img.setAttribute('src', data);
+            modal.get('contentBox').one('.modal-body').addClass('whiteboard-download-modal');
             modal.get('contentBox').one('.modal-body').append(img);
         }
     }

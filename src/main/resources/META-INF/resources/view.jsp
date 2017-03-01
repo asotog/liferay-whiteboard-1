@@ -19,7 +19,8 @@
             'rivetlogic.whiteboard.edit.text': '<liferay-ui:message key="rivetlogic.whiteboard.edit.text"/>',
             'rivetlogic.whiteboard.confirm.label': '<liferay-ui:message key="rivetlogic.whiteboard.confirm.label"/>',
             'rivetlogic.whiteboard.cancel.label': '<liferay-ui:message key="rivetlogic.whiteboard.cancel.label"/>',
-            'rivetlogic.whiteboard.guest.name.label': '<liferay-ui:message key="rivetlogic.whiteboard.guest.name.label"/>'
+            'rivetlogic.whiteboard.guest.name.label': '<liferay-ui:message key="rivetlogic.whiteboard.guest.name.label"/>',
+            'rivetlogic.whiteboard.download.downloadaction': '<liferay-ui:message key="rivetlogic.whiteboard.download.downloadaction"/>'
         }
     };
 </script>
