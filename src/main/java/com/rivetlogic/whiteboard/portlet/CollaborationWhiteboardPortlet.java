@@ -16,6 +16,7 @@ import org.osgi.service.component.annotations.Component;
 		"com.liferay.portlet.instanceable=false",
 		"com.liferay.portlet.css-class-wrapper=whiteboard-portlet",
 		"com.liferay.portlet.header-portlet-css=/css/main.css",
+		"com.liferay.portlet.header-portlet-css=/css/main-responsive.css",
 		"javax.portlet.display-name=Collaboration Whiteboard",
 		"javax.portlet.init-param.template-path=/",
 		"javax.portlet.init-param.view-template=/view.jsp",

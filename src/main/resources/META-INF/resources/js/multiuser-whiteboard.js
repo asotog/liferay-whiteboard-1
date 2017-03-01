@@ -40,6 +40,7 @@ AUI.add('multiuser-whiteboard', function (A, NAME) {
             
             this.bindCommEvents();
             this.get(CONTAINER).one(SELECTOR_USERS_ONLINE + ' .expand-collapse-btn').on('click', function(e) {
+            	e.preventDefault();
                 instance.get(CONTAINER).one(SELECTOR_USERS_ONLINE + ' .expand-collapse-btn').toggleClass('selected');
                 instance.get(CONTAINER).one(SELECTOR_USERS_ONLINE + ' .users-online-wrapper').toggleClass('show');
             });
