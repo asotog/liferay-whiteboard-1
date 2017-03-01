@@ -2,9 +2,11 @@
 
 .whiteboard-btn-group {
     padding: 10px 0;
-    button {
-        margin-right: 10px;
-    }
+   
+}
+
+.whiteboard-btn-group button {
+    margin-right: 10px;
 }
 
 .whiteboard-portlet,
@@ -93,13 +95,16 @@
 }
 
 .whiteboard-portlet .editor menu button {
+	padding: 8px 14px;
     width: 55px;
 }
 
 .whiteboard-portlet .editor  menu button span {
     text-indent: -9999px;
     display: block;
+    margin: 0 auto;
     height: 20px;
+    width: 20px;
 }
 
 .whiteboard-portlet .editor  menu button i {
