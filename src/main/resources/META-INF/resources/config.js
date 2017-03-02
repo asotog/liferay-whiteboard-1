@@ -1,5 +1,4 @@
 ;(function() {
-	var timestamp = new Date().getTime();
 	AUI().applyConfig({
 		groups : {
 			whiteboard : {
@@ -7,31 +6,31 @@
 				combine : Liferay.AUI.getCombine(),
 				modules : {
 					'collaboration-whiteboard-portlet' : {
-						path : 'collaboration-whiteboard.js?t=' + timestamp,
+						path : 'collaboration-whiteboard.js',
 						requires : []
 					},
 					'multiuser-whiteboard' : {
-						path : 'multiuser-whiteboard.js?t=' + timestamp,
+						path : 'multiuser-whiteboard.js',
 						requires : []
 					},
 					'whiteboard' : {
-						path : 'whiteboard.js?t=' + timestamp,
+						path : 'whiteboard.js',
 						requires : []
 					},
 					'text-editor' : {
-						path : 'text-editor.js?t=' + timestamp,
+						path : 'text-editor.js',
 						requires : []
 					},
 					'color-picker' : {
-						path : 'color-picker.js?t=' + timestamp,
+						path : 'color-picker.js',
 						requires : []
 					},
 					'download-util' : {
-						path : 'download-util.js?t=' + timestamp,
+						path : 'download-util.js',
 						requires : []
 					},
 					'fabricjs' : {
-						path : 'third-party/fabric.min.js?t=' + timestamp,
+						path : 'third-party/fabric.min.js',
 						requires : []
 					}
 				},
