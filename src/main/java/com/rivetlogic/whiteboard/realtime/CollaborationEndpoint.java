@@ -65,7 +65,7 @@ public class CollaborationEndpoint extends Endpoint {
 		String userName = "";
 		
 		if (sessions.get(session.getId()) == null && currentUser != null) {
-			if (currentUser == null || currentUser.isDefaultUser()) {
+			if (currentUser.isDefaultUser()) {
                 LOG.debug("This is guest user");
                 userName = guestLabel;
             } else {
