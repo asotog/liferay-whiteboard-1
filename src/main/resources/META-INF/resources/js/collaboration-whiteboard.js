@@ -41,6 +41,10 @@ AUI.add('collaboration-whiteboard-portlet', function (A, NAME) {
 
         var canvas = new fabric.Canvas(CANVAS_NAME);
         A.on(['orientationchange', 'resize'], function (e) {
+        	var containerElement = A.one(SELECTOR_WHITEBOARD_PORTLET + SPACE + SELECTOR_EDITOR);
+        	if (!containerElement) {
+        		return;
+        	}
             containerWidth = A.one(SELECTOR_WHITEBOARD_PORTLET + SPACE + SELECTOR_EDITOR).get('offsetWidth');
             canvas.setDimensions({
                 width: containerWidth,
