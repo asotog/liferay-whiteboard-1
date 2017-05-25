@@ -18,12 +18,10 @@ import com.liferay.portal.kernel.cache.PortalCache;
 import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.util.HttpUtil;
-import com.liferay.portal.kernel.util.LocaleUtil;
 
 @Component(
 		immediate = true,
@@ -67,7 +65,7 @@ public class CollaborationEndpoint extends Endpoint {
 		String userName = "";
 		
 		if (sessions.get(session.getId()) == null && currentUser != null) {
-			if (currentUser == null || currentUser.isDefaultUser()) {
+			if (currentUser.isDefaultUser()) {
                 LOG.debug("This is guest user");
                 userName = guestLabel;
             } else {
