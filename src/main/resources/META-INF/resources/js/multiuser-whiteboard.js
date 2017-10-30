@@ -162,6 +162,12 @@ AUI.add('multiuser-whiteboard', function (A, NAME) {
                     this.deleteShapeFromCache(command.cacheId);
                     cachedShape.remove();
                 }
+                if (command.action == A.EditorManager.CONSTANTS.SENT_TO_BACK && cachedShape) {
+                    cachedShape.sendToBack();
+                }
+                if (command.action == A.EditorManager.CONSTANTS.BRING_TO_FRONT && cachedShape) {
+                    cachedShape.bringToFront();
+                }
                 if (command.action == MultiuserEditor.CONSTANTS.USERS) {
                     this.get(CONTAINER).one(SELECTOR_USERS_ONLINE + ' .count').set('text', command.users.length);
                     this.get(CONTAINER).one(SELECTOR_USERS_ONLINE + ' .bd').empty();
