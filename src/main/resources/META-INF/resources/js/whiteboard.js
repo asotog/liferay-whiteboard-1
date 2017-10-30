@@ -124,11 +124,13 @@ AUI.add('whiteboard', function (A, NAME) {
                     case 'send-to-back':
                         if (instance.get(SELECTED_SHAPE)) {
                             instance.get(SELECTED_SHAPE).sendToBack();
+                            instance.get(SELECTED_SHAPE).fire('afterSendToBack');
                         }
                         break;
                     case 'bring-to-front':
                         if (instance.get(SELECTED_SHAPE)) {
                             instance.get(SELECTED_SHAPE).bringToFront();
+                            instance.get(SELECTED_SHAPE).fire('afterBringToFront');
                         }
                         break;
                     default:
@@ -351,6 +353,12 @@ AUI.add('whiteboard', function (A, NAME) {
                 shape.on('moving', function () {
                     instance.addToCommands(cacheId, EditorManager.CONSTANTS.MODIFY, command.type, instance.retrieveShapeState(this));
                 });
+                shape.on('afterBringToFront', function () {
+                    instance.addToCommands(cacheId, EditorManager.CONSTANTS.BRING_TO_FRONT, command.type, instance.retrieveShapeState(this));
+                });
+                shape.on('afterSendToBack', function () {
+                    instance.addToCommands(cacheId, EditorManager.CONSTANTS.SENT_TO_BACK, command.type, instance.retrieveShapeState(this));
+                });
                 /* trigger event when is a new shape added */
                 if (typeof command.cacheId == 'undefined') {
                     instance.addToCommands(cacheId, EditorManager.CONSTANTS.CREATE, command.type, state);
@@ -548,6 +556,8 @@ AUI.add('whiteboard', function (A, NAME) {
         CREATE: 'create',
         MODIFY: 'modify',
         DELETE: 'delete',
+        SENT_TO_BACK: 'sendToBack',
+        BRING_TO_FRONT: 'bringToFront',
 
         /* shapes */
         RECTANGLE: 'rectangle',
