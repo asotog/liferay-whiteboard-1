@@ -1,15 +1,15 @@
 /**
  * Copyright (C) 2005-2014 Rivet Logic Corporation.
- * 
+ *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
  * Foundation; version 3 of the License.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
@@ -17,14 +17,15 @@
 
 package com.rivetlogic.portlet.whiteboard.atmosphere;
 
+import java.util.ArrayList;
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentMap;
+
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-
-import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentMap;
 
 public class WhiteboardHandlerUtil {
 
@@ -66,7 +67,7 @@ public class WhiteboardHandlerUtil {
 
     /**
      * Generate JSON from current logged users map.
-     * 
+     *
      * @param loggedUserMap
      * @return
      */
@@ -75,18 +76,23 @@ public class WhiteboardHandlerUtil {
         JSONObject usersUpdateCommand = JSONFactoryUtil.createJSONObject();
         JSONArray commands = JSONFactoryUtil.createJSONArray();
         JSONArray users = JSONFactoryUtil.createJSONArray();
-
+        ArrayList<String> existingUsers = new ArrayList<String>();
         usersUpdateCommand.put(ACTION, USERS);
 
         for (Entry<String, UserData> entry : loggedUserMap.entrySet()) {
             String key = entry.getKey();
             UserData userData = entry.getValue();
             JSONObject user = JSONFactoryUtil.createJSONObject();
-            LOG.debug(user);
-            user.put(USERNAME, userData.getUserName());
-            user.put(USER_IMAGEPATH, userData.getUserImagePath());
-            user.put(SESSIONID, key);
-            users.put(user);
+            String userName = userData.getUserName().trim().toUpperCase();
+            if (!existingUsers.contains(userName)) {
+                //LOG.debug(user);
+            	    existingUsers.add(userName);
+                user.put(USERNAME, userData.getUserName());
+                user.put(USER_IMAGEPATH, userData.getUserImagePath());
+                user.put(SESSIONID, key);
+                users.put(user);
+            }
+
         }
 
         usersUpdateCommand.put(USERS, users);
@@ -98,7 +104,7 @@ public class WhiteboardHandlerUtil {
         usersLogged.put(COMMANDS, commands);
         usersLogged.put(EDITOR_ID, DEFAULT_EDITOR_ID);
 
-        LOG.debug(usersLogged.toString());
+        //LOG.debug(usersLogged.toString());
 
         return usersLogged;
 
@@ -108,7 +114,7 @@ public class WhiteboardHandlerUtil {
      * Persists whiteboard state, so if new users join the whiteboard, they can
      * use the dump to initialize the whiteboard with the shapes previously
      * created.
-     * 
+     *
      * @param whiteBoardDump
      * @param jsonMessage
      */
@@ -161,7 +167,7 @@ public class WhiteboardHandlerUtil {
 
     /**
      * Transforms current dump into JSON array of actions to be dumped.
-     * 
+     *
      * @param whiteBoardDump
      * @return
      */

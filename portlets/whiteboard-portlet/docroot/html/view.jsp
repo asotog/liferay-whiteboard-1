@@ -1,16 +1,16 @@
 <%--
 /**
  * Copyright (C) 2005-2014 Rivet Logic Corporation.
- * 
+ *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
  * Foundation; version 3 of the License.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc., 51
  */
@@ -27,10 +27,10 @@
 <liferay-theme:defineObjects />
 <portlet:defineObjects />
 <input type="hidden" class="profile-image-path" value="<%= HtmlUtil.escape(user.getPortraitURL(themeDisplay)) %>"/>
-  
+
 <div class="editor">
     <div class="users-online">
-        <a href="#" class="expand-collapse-btn"><i class="icon-user"></i> <span class="count"></span> <liferay-ui:message key="rivetlogic.whiteboard.users.online"/></a>
+        <a href="#" class="expand-collapse-btn"><i class="icon-user"></i> <span class="count"></span><liferay-ui:message key="rivetlogic.whiteboard.users.online"/></a>
         <div class="users-online-wrapper">
             <header><h6><liferay-ui:message key="rivetlogic.whiteboard.users.header"/></h6></header>
             <div class="bd"></div>
@@ -100,9 +100,8 @@
                 </span>
             </div>
         </div>
-
     </menu>
-    <canvas id="editor-canvas" height="500"></canvas>
+    <canvas id="editor-canvas" height="600"></canvas>
     <div class="text-editor hidden">
         <textarea class="text"></textarea>
         <button class="btn btn-primary edit"><liferay-ui:message key="rivetlogic.whiteboard.canvas.edit"/></button>
