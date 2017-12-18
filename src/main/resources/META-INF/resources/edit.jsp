@@ -46,6 +46,7 @@
     <div class="panel panel-default">
         <div class="panel-heading"><liferay-ui:message key="label.websocket.settings"/></div>
         <div class="panel-body">
+            <aui:input value="${prefBean.useWebsocketSecured}" name="<%=Constants.USE_WEBSOCKET_SECURED %>" type="checkbox" label="label.websocket.usewebsocketsecured"></aui:input>
             <aui:input value="${prefBean.useCustomWebsocketUrl}" name="<%=Constants.USE_CUSTOM_WEBSOCKET_URL %>" type="checkbox" label="label.websocket.usecustomurl"></aui:input>
             <aui:input value="${prefBean.customWebsocketBasePath}" name="<%=Constants.CUSTOM_WEBSOCKET_BASE_PATH %>" type="text" label="label.websocket.custombasepath"></aui:input>
         </div>

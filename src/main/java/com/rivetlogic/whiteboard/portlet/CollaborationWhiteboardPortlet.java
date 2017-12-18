@@ -57,6 +57,7 @@ public class CollaborationWhiteboardPortlet extends MVCPortlet {
         ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
         PreferencesBean prefBean = new PreferencesBean(request, 
             getUseCustomWebsocketUrl(), 
+            getUseWebsocketSecured(),
             preferences.getCustomWebsocketBasePath());
         request.setAttribute(Constants.SIGNED_IN, themeDisplay.isSignedIn());
         request.setAttribute(Constants.PREF_BEAN, prefBean);
@@ -79,6 +80,10 @@ public class CollaborationWhiteboardPortlet extends MVCPortlet {
 	private boolean getUseCustomWebsocketUrl() {
 		return Boolean.valueOf(preferences.getUseCustomWebsocketUrl());
     }
+	
+	private boolean getUseWebsocketSecured() {
+		return Boolean.valueOf(preferences.getUseWebsocketSecured());
+	}
 	
 	@Activate
     @Modified

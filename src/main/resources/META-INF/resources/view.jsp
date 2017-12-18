@@ -12,9 +12,12 @@
  if (preferencesBean.getUseCustomWebsocketUrl()) {
 	 baseWebsocketURL = baseWebsocketURL + preferencesBean.getCustomWebsocketBasePath();
  }
- 
+ String webSocketProtocol = "ws://";
+ if (preferencesBean.getUseWebsocketSecured()) {
+	 webSocketProtocol = "wss://";
+ }
  String userImagePath = user.getPortraitURL(themeDisplay);
- String websocketURL = "ws://" + baseWebsocketURL + CollaborationEndpoint.PATH;
+ String websocketURL = webSocketProtocol + baseWebsocketURL + CollaborationEndpoint.PATH;
  websocketURL = HttpUtil.addParameter(websocketURL, "userId", user.getUserId());
  websocketURL = HttpUtil.addParameter(websocketURL, "userImagePath", userImagePath);
  websocketURL = HttpUtil.addParameter(websocketURL, "guestLabel",  LanguageUtil.get(request, "rivetlogic.whiteboard.guest.name.label"));

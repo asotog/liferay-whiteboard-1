@@ -32,17 +32,20 @@ import javax.portlet.ValidatorException;
 
 public class PreferencesBean {
 	private boolean useCustomWebsocketUrl;
+	private boolean useWebsocketSecured;
 	private String customWebsocketBasePath;
 	private String portletId;
 	
 	private static final Log _log = LogFactoryUtil.getLog(PreferencesBean.class);
 	
-	public PreferencesBean(PortletRequest request, boolean useCustomWebsocketUrl, String customWebsocketUrl){
+	public PreferencesBean(PortletRequest request, boolean useCustomWebsocketUrl, boolean useWebsocketSecured, String customWebsocketUrl){
 		PortletPreferences preferences = request.getPreferences();
 		
 		portletId = GetterUtil.getString(request.getAttribute(WebKeys.PORTLET_ID));
 		this.useCustomWebsocketUrl = GetterUtil.getBoolean(preferences.getValue(Constants.USE_CUSTOM_WEBSOCKET_URL,
 				String.valueOf(useCustomWebsocketUrl)));
+		this.useWebsocketSecured = GetterUtil.getBoolean(preferences.getValue(Constants.USE_WEBSOCKET_SECURED, 
+				String.valueOf(useWebsocketSecured)));
 		this.customWebsocketBasePath = GetterUtil.getString(preferences.getValue(Constants.CUSTOM_WEBSOCKET_BASE_PATH,
 				String.valueOf(customWebsocketUrl)));
 		_log.debug("useCustomWebsocketUrl:" + this.useCustomWebsocketUrl);
@@ -51,14 +54,17 @@ public class PreferencesBean {
 	public PreferencesBean(){
 		useCustomWebsocketUrl = Constants.DEFAULT_USE_CUSTOM_WEBSOCKET_BASE_PATH;
 		customWebsocketBasePath = Constants.DEFAULT_CUSTOM_WEBSOCKET_BASE_PATH;
+		useWebsocketSecured = Constants.DEFAULT_USE_WEBSOCKET_SECURED;
 	}
 	
 	public void save(PortletRequest request) throws ReadOnlyException, ValidatorException, IOException{
 		PortletPreferences preferences = request.getPreferences();
 		
+		this.useWebsocketSecured = ParamUtil.getBoolean(request, Constants.USE_WEBSOCKET_SECURED, this.useWebsocketSecured);
 		this.useCustomWebsocketUrl = ParamUtil.getBoolean(request, Constants.USE_CUSTOM_WEBSOCKET_URL, this.useCustomWebsocketUrl);
 		this.customWebsocketBasePath = ParamUtil.getString(request, Constants.CUSTOM_WEBSOCKET_BASE_PATH, this.customWebsocketBasePath);
 		
+		preferences.setValue(Constants.USE_WEBSOCKET_SECURED, String.valueOf(this.useWebsocketSecured));
 		preferences.setValue(Constants.USE_CUSTOM_WEBSOCKET_URL, String.valueOf(this.useCustomWebsocketUrl));
 		preferences.setValue(Constants.CUSTOM_WEBSOCKET_BASE_PATH, String.valueOf(this.customWebsocketBasePath));
 		
@@ -68,7 +74,11 @@ public class PreferencesBean {
 	public boolean getUseCustomWebsocketUrl() {
 		return useCustomWebsocketUrl;
 	}
-
+	
+	public boolean getUseWebsocketSecured() {
+		return useWebsocketSecured;
+	}
+	
 	public String getCustomWebsocketBasePath() {
 		return customWebsocketBasePath;
 	}
@@ -81,6 +91,10 @@ public class PreferencesBean {
 		this.useCustomWebsocketUrl = useCustomWebsocketUrl;
 	}
 
+	public void setUseWebsocketSecured(boolean useWebsocketSecured) {
+		this.useWebsocketSecured = useWebsocketSecured;
+	}
+	
 	public void setCustomWebsocketBasePath(String customWebsocketBasePath) {
 		this.customWebsocketBasePath = customWebsocketBasePath;
 	}
