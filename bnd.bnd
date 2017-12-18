@@ -3,3 +3,9 @@ Bundle-SymbolicName: com.rivetlogic.whiteboard
 Bundle-Version: 1.0.0
 Liferay-JS-Config: /META-INF/resources/config.js
 Web-ContextPath: /collaboration-whiteboard
+-metatype: *
+-jsp: *.jsp,*.jspf
+-plugin.bundle: com.liferay.ant.bnd.resource.bundle.ResourceBundleLoaderAnalyzerPlugin
+-plugin.jsp: com.liferay.ant.bnd.jsp.JspAnalyzerPlugin
+-sources: true
+-dsannotations-options: inherit

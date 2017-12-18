@@ -1,8 +1,20 @@
 <%@ include file="/init.jsp" %>
 
+<!-- <pre> -->
+<!-- Debug: -->
+<%-- Use custom websocket settings: ${prefBean.useCustomWebsocketUrl} --%>
+<%-- Custom websocket base path: ${prefBean.customWebsocketBasePath} --%>
+<!-- </pre> -->
+
 <%
+ PreferencesBean preferencesBean = (PreferencesBean) request.getAttribute("prefBean");
+ String baseWebsocketURL = request.getServerName() + ":" + request.getServerPort();
+ if (preferencesBean.getUseCustomWebsocketUrl()) {
+	 baseWebsocketURL = baseWebsocketURL + preferencesBean.getCustomWebsocketBasePath();
+ }
+ 
  String userImagePath = user.getPortraitURL(themeDisplay);
- String websocketURL = "ws://" + request.getServerName() + ":" + request.getServerPort() + CollaborationEndpoint.PATH;
+ String websocketURL = "ws://" + baseWebsocketURL + CollaborationEndpoint.PATH;
  websocketURL = HttpUtil.addParameter(websocketURL, "userId", user.getUserId());
  websocketURL = HttpUtil.addParameter(websocketURL, "userImagePath", userImagePath);
  websocketURL = HttpUtil.addParameter(websocketURL, "guestLabel",  LanguageUtil.get(request, "rivetlogic.whiteboard.guest.name.label"));

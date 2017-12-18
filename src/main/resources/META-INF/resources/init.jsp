@@ -11,6 +11,7 @@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 <%@ page import="com.liferay.portal.kernel.util.HttpUtil" %>
 <%@ page import="com.liferay.portal.kernel.language.LanguageUtil" %>
 <%@ page import="com.rivetlogic.whiteboard.realtime.CollaborationEndpoint" %>
+<%@ page import="com.rivetlogic.whiteboard.portlet.PreferencesBean" %>
 
 <liferay-theme:defineObjects />
 
