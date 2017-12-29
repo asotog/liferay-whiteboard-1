@@ -34,6 +34,8 @@ AUI.add('multiuser-whiteboard', function (A, NAME) {
 
         disconnectedModalMessage: null,
 
+        keepAliveTimer: null, // timer that keeps websocket alive
+        
         initializer: function () {
             var instance = this;
 
@@ -59,9 +61,11 @@ AUI.add('multiuser-whiteboard', function (A, NAME) {
                 websocket.send(A.JSON.stringify({
                     type: MultiuserEditor.CONSTANTS.LOGIN
                 }));
+                instance.keepAlive(websocket);
             };
             websocket.onclose = function (evt) {
                 instance.fire('connectionClosed');
+                instance.cancelKeepAlive();
             };
             websocket.onmessage = function (event) {
                 instance.processMessage(function (data) {
@@ -89,6 +93,23 @@ AUI.add('multiuser-whiteboard', function (A, NAME) {
             Liferay.on('beforeNavigate', function (event) {
                 websocket.close();
             });
+        },
+
+        keepAlive: function (websocket) {
+            var instance = this;
+            var timeout = 20000;  
+            if (websocket.readyState == websocket.OPEN) {  
+                websocket.send(A.JSON.stringify({keepAlive: true}));  
+            }  
+            this.keepAliveTimer = window.setTimeout(function() {
+                instance.keepAlive(websocket);
+            }, timeout);  
+        },
+        
+        cancelKeepAlive: function() {  
+            if (this.keepAliveTimer) {  
+                window.clearTimeout(this.keepAliveTimer);  
+            }  
         },
 
         /**
