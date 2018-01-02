@@ -110,6 +110,7 @@ AUI.add('whiteboard', function (A, NAME) {
             });
 
             menu.one(SELECTOR_DOWNLOAD).on('click', function (e) {
+                instance.get(CANVAS).deactivateAll().renderAll(); // get rid of active indicator over shapes
                 A.EditorDownload.show(instance.get(CANVAS));
             });
 
