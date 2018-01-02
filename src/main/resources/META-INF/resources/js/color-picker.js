@@ -49,6 +49,7 @@ YUI.add('color-picker', function (Y, NAME) {
             colorPickerContainer.removeClass('hidden');
             this.sample = this.get(CONTAINER).one(SELECTOR_SAMPLE);
             this.sample.on('click', function (e) {
+                Y.all(SELECTOR_COLOR_PICKER_CONTAINER).addClass('hidden'); // hide other pickers first
                 colorPickerContainer.removeClass('hidden');
             });
             this.get(CONTAINER).one(SELECTOR_CLOSE_PICKER).on('click', function (e) {
