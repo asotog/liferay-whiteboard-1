@@ -1,6 +1,7 @@
 .*
 !.gitignore
 *classes/
+bin
 *~
 /build.*.properties
 !/build.daemon.properties
