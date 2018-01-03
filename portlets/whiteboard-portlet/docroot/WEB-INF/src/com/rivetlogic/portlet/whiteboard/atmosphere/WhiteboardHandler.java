@@ -1,15 +1,15 @@
 /**
  * Copyright (C) 2005-2014 Rivet Logic Corporation.
- * 
+ *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
  * Foundation; version 3 of the License.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
@@ -53,10 +53,10 @@ import org.atmosphere.util.SimpleBroadcaster;
 @AtmosphereHandlerService(  path = "/{whiteboardId}",  // makes each whiteboard isolated per page, so only can be accesed by going to specific page
 							supportSession = true, 
                             interceptors = {
-                                AtmosphereResourceLifecycleInterceptor.class, 
+                                AtmosphereResourceLifecycleInterceptor.class,
                                 TrackMessageSizeInterceptor.class,
-                                BroadcastOnPostAtmosphereInterceptor.class, 
-                                SuspendTrackerInterceptor.class }, 
+                                BroadcastOnPostAtmosphereInterceptor.class,
+                                SuspendTrackerInterceptor.class },
                             broadcaster = SimpleBroadcaster.class)
 
 public class WhiteboardHandler extends AtmosphereHandlerAdapter {
@@ -137,13 +137,13 @@ public class WhiteboardHandler extends AtmosphereHandlerAdapter {
 
                 String baseImagePath = URLDecoder.decode(
                         resource.getRequest().getParameter(WhiteboardHandlerUtil.BASE_IMAGEPATH), ENCODING);
-                LOG.debug("base image path " + baseImagePath);
+                //LOG.debug("base image path " + baseImagePath);
 
                 User user = PortalUtil.getUser(resource.getRequest());
                 long companyId = PortalUtil.getCompanyId(resource.getRequest());
 
                 if (user == null || user.isDefaultUser()) {
-                    LOG.debug("This is guest user");
+                    //LOG.debug("This is guest user");
                     user = UserLocalServiceUtil.getDefaultUser(companyId);
                     userName = LanguageUtil.get(LocaleUtil.getDefault(), WhiteboardHandlerUtil.GUEST_USER_NAME_LABEL);
                 } else {
@@ -152,7 +152,7 @@ public class WhiteboardHandler extends AtmosphereHandlerAdapter {
 
                 userImagePath = UserConstants.getPortraitURL(baseImagePath, user.isMale(), user.getPortraitId());
 
-                LOG.debug(String.format("User full name: %s, User image path: %s", userName, userImagePath));
+                //LOG.debug(String.format("User full name: %s, User image path: %s", userName, userImagePath));
             } catch (Exception e) {
                 LOG.error(e.getMessage());
             }
@@ -188,7 +188,7 @@ public class WhiteboardHandler extends AtmosphereHandlerAdapter {
                         event.getResource().getBroadcaster().broadcast(usersLoggedMessage);
                     } else {
                         /* just broadcast the message */
-                        LOG.debug("Broadcasting = " + message);
+                        //LOG.debug("Broadcasting = " + message);
                         /* adds whiteboard updates to the dump */
                         WhiteboardHandlerUtil.persistWhiteboardDump(whiteBoardDump, jsonMessage);
                         event.getResource().write(message);
