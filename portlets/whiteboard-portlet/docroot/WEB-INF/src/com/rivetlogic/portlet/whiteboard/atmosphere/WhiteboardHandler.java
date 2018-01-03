@@ -50,7 +50,8 @@ import org.atmosphere.util.SimpleBroadcaster;
 
 @Singleton
 
-@AtmosphereHandlerService(  path = "/", supportSession = true, 
+@AtmosphereHandlerService(  path = "/{whiteboardId}",  // makes each whiteboard isolated per page, so only can be accesed by going to specific page
+							supportSession = true, 
                             interceptors = {
                                 AtmosphereResourceLifecycleInterceptor.class, 
                                 TrackMessageSizeInterceptor.class,
@@ -63,37 +64,67 @@ public class WhiteboardHandler extends AtmosphereHandlerAdapter {
     public static final String CACHE_NAME = WhiteboardHandler.class.getName();
     private static final String ENCODING = "UTF-8";
     private static final String DUMP_MESSAGE = "dump";
+    private static final String BROADCAST_NAME_PREFIX="/delegate/collaboration-whiteboard/";
+    
     private static final Log LOG = LogFactoryUtil.getLog(WhiteboardHandler.class);
     @SuppressWarnings("rawtypes")
     private static PortalCache portalCache = MultiVMPoolUtil.getCache(CACHE_NAME);
 
     @SuppressWarnings("unchecked")
-    private ConcurrentMap<String, UserData> getLoggedUsersMap() {
+    private ConcurrentMap<String, UserData> getLoggedUsersMap(String whiteboardId) {
 
-        Object object = portalCache.get(WhiteboardHandlerUtil.LOGGED_USERS_MAP_KEY);
-        ConcurrentMap<String, UserData> loggedUserMap = (ConcurrentMap<String, UserData>) object;
-        if (null == loggedUserMap) {
-            loggedUserMap = new ConcurrentSkipListMap<String, UserData>();
-            portalCache.put(WhiteboardHandlerUtil.LOGGED_USERS_MAP_KEY, loggedUserMap);
+        Object whiteboard = portalCache.get(WhiteboardHandlerUtil.LOGGED_USERS_MAP_KEY);
+        ConcurrentMap<String, ConcurrentMap<String, UserData>> whiteboardUserMap = (ConcurrentMap<String, ConcurrentMap<String, UserData>>) whiteboard;
+        if (null == whiteboardUserMap) {
+        	whiteboardUserMap = new ConcurrentSkipListMap<String, ConcurrentMap<String, UserData>>();
+            portalCache.put(WhiteboardHandlerUtil.LOGGED_USERS_MAP_KEY, whiteboardUserMap);
         }
-        return loggedUserMap;
+        
+        ConcurrentMap<String, UserData> loggedUserMapObject = whiteboardUserMap.get(whiteboardId); 
+		
+		ConcurrentMap<String, UserData> loggedUserMap = (ConcurrentMap<String, UserData>) loggedUserMapObject;
+		
+		if (null == loggedUserMap) {
+			loggedUserMap = new ConcurrentSkipListMap<String, UserData>();
+			whiteboardUserMap.put(whiteboardId,
+					loggedUserMap);
+		}
+		return loggedUserMap;
     }
 
     @SuppressWarnings("unchecked")
-    private ConcurrentMap<String, JSONObject> getWhiteBoardDump() {
+    private ConcurrentMap<String, JSONObject> getWhiteBoardDump(String whiteboardId) {
         Object object = portalCache.get(WhiteboardHandlerUtil.WHITEBOARD_DUMP_KEY);
-        ConcurrentMap<String, JSONObject> whiteBoardDump = (ConcurrentMap<String, JSONObject>) object;
+        ConcurrentMap<String, ConcurrentMap<String, JSONObject>> whiteBoardDump = (ConcurrentMap<String, ConcurrentMap<String, JSONObject>>) object;
+        
         if (null == whiteBoardDump) {
-            whiteBoardDump = new ConcurrentSkipListMap<String, JSONObject>();
+            whiteBoardDump = new ConcurrentSkipListMap<String, ConcurrentMap<String, JSONObject>>();
             portalCache.put(WhiteboardHandlerUtil.WHITEBOARD_DUMP_KEY, whiteBoardDump);
         }
-        return whiteBoardDump;
+        
+        ConcurrentMap<String, JSONObject> dumpMapObject = whiteBoardDump.get(whiteboardId);
+        ConcurrentMap<String, JSONObject> dumpMap = (ConcurrentMap<String, JSONObject>) dumpMapObject;
+		
+		if (null == dumpMap) {
+			dumpMap = new ConcurrentSkipListMap<String, JSONObject>();
+			whiteBoardDump.put(whiteboardId,
+					dumpMap);
+		}
+        
+        return dumpMap;
     }
 
+    
+    private String extractBroadCastId(AtmosphereResource resource){
+		String name = resource.getBroadcaster().getID();
+		return name.replace(BROADCAST_NAME_PREFIX, "");
+	}
+    
     @Override
     public void onRequest(AtmosphereResource resource) throws IOException {
 
-        ConcurrentMap<String, UserData> loggedUserMap = getLoggedUsersMap();
+    	String whiteboardId = extractBroadCastId(resource);
+        ConcurrentMap<String, UserData> loggedUserMap = getLoggedUsersMap(whiteboardId);
 
         String userName = StringPool.BLANK;
         String userImagePath = StringPool.BLANK;
@@ -136,8 +167,10 @@ public class WhiteboardHandler extends AtmosphereHandlerAdapter {
     @Override
     public void onStateChange(AtmosphereResourceEvent event) throws IOException {
 
-        ConcurrentMap<String, UserData> loggedUserMap = getLoggedUsersMap();
-        ConcurrentMap<String, JSONObject> whiteBoardDump = getWhiteBoardDump();
+    	String whiteboardId = extractBroadCastId(event.getResource());
+    	
+        ConcurrentMap<String, UserData> loggedUserMap = getLoggedUsersMap(whiteboardId);
+        ConcurrentMap<String, JSONObject> whiteBoardDump = getWhiteBoardDump(whiteboardId);
 
         /* messages broadcasting */
         if (event.isSuspended()) {

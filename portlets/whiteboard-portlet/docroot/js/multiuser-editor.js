@@ -69,7 +69,7 @@ YUI.add('multiuser-whiteboard', function (Y, NAME) {
             var instance = this;
             var baseUrl = document.location.toString().split('/').slice(0, 3).join('/'); // gets only protocol, domain and port from current url
             var request = {
-                url: baseUrl + '/delegate/collaboration-whiteboard/?baseImagePath=' +
+                url: baseUrl + '/delegate/collaboration-whiteboard/' + Liferay.ThemeDisplay.getLayoutId() + '?baseImagePath=' +
                     encodeURIComponent(instance.get('baseImagePath')),
                 trackMessageLength: true,
                 transport: 'websocket'
