@@ -33,6 +33,7 @@ AUI.add('whiteboard', function (A, NAME) {
     var SELECTOR_FREE = '.free';
     var SELECTOR_CLEAN = '.clean';
     var SELECTOR_DROPDOWN = '.dropdown-menu';
+    var SELECTOR_DROPDOWN_WRAPPER = '.dropdown-menu-wrapper';
 
     var strings = window.CollaborationWhiteboardPortlet.strings;
 
@@ -116,10 +117,10 @@ AUI.add('whiteboard', function (A, NAME) {
 
             menu.one(SELECTOR_OPTIONS).on('click', function (e) {
                 this.toggleClass('selected');
-                this.one(SELECTOR_DROPDOWN).toggleClass('show');
+                this.ancestor(SELECTOR_DROPDOWN_WRAPPER).one(SELECTOR_DROPDOWN).toggleClass('show');
             });
 
-            menu.one(SELECTOR_OPTIONS).delegate('click', function () {
+            menu.delegate('click', function () {
                 var action = this.getAttribute('data-action');
                 switch (action) {
                     case 'send-to-back':
@@ -145,7 +146,7 @@ AUI.add('whiteboard', function (A, NAME) {
                     return;
                 }
                 menu.one(SELECTOR_OPTIONS).removeClass('selected');
-                menu.one(SELECTOR_OPTIONS).one(SELECTOR_DROPDOWN).removeClass('show');
+                menu.one(SELECTOR_OPTIONS).ancestor(SELECTOR_DROPDOWN_WRAPPER).one(SELECTOR_DROPDOWN).removeClass('show');
             });
 
             /* delete button */
