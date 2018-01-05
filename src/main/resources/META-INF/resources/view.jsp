@@ -68,13 +68,15 @@
             <button class="btn free" title='<liferay-ui:message key="rivetlogic.whiteboard.shapes.free.title"/>'><i class="icon-pencil" ></i></button>
             <button class="btn add" data-shape="text" title='<liferay-ui:message key="rivetlogic.whiteboard.shapes.text.title"/>'><span></span></button>
             <button class="btn delete" title='<liferay-ui:message key="rivetlogic.whiteboard.shapes.remove.title"/>'><i class="icon-remove"></i></button>
-            <button class="btn objects-options" title='<liferay-ui:message key="rivetlogic.whiteboard.shapes.objectsoptions.title"/>'>
-        <i class="icon-cog"></i>
-        <ul class="dropdown-menu text-left" role="menu" aria-labelledby="dropdownMenu">
-            <li><a data-action="send-to-back" href="javascript:void(0)"><liferay-ui:message key="rivetlogic.whiteboard.shapes.sendtoback.title"/></a></li>
-            <li><a data-action="bring-to-front" href="javascript:void(0)"><liferay-ui:message key="rivetlogic.whiteboard.shapes.bringtofront.title"/></a></li>
-        </ul>
-    </button>
+            <div class="dropdown-menu-wrapper">
+                <button class="btn objects-options" title='<liferay-ui:message key="rivetlogic.whiteboard.shapes.objectsoptions.title"/>'>
+                    <i class="icon-cog"></i>
+                </button>
+                <ul class="dropdown-menu text-left" role="menu" aria-labelledby="dropdownMenu">
+                    <li><a data-action="send-to-back" href="javascript:void(0)"><liferay-ui:message key="rivetlogic.whiteboard.shapes.sendtoback.title"/></a></li>
+                    <li><a data-action="bring-to-front" href="javascript:void(0)"><liferay-ui:message key="rivetlogic.whiteboard.shapes.bringtofront.title"/></a></li>
+                </ul>
+            </div>
             <button class="btn download" title='<liferay-ui:message key="rivetlogic.whiteboard.download.downloadaction"/>'><i class="icon-download-alt"></i></button>
             <button class="btn clean" title='<liferay-ui:message key="rivetlogic.whiteboard.clean.canvas.title"/>'><i class="icon-trash"></i></button>
             <div class="color-picker stroke yui3-skin-sam"><label><liferay-ui:message key="rivetlogic.whiteboard.stroke"/></label>
