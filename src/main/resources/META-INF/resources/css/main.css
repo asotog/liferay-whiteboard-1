@@ -96,6 +96,7 @@
 .whiteboard-portlet .editor menu button {
 	padding: 8px 14px;
     width: 55px;
+    margin: 0;
 }
 
 .whiteboard-portlet .editor  menu button span {

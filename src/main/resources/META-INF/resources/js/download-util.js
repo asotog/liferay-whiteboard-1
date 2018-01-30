@@ -32,7 +32,6 @@ YUI.add('download-util', function (Y, NAME) {
                 centered: true,
                 destroyOnHide: true,
                 headerContent: strings['rivetlogic.whiteboard.download.downloadaction'],
-                //height: 200,
                 modal: true,
                 render: 'body',
                 resizable: {
@@ -40,11 +39,12 @@ YUI.add('download-util', function (Y, NAME) {
                 },
                 visible: true,
                 zIndex: 9999
-                //width: 450
             }).render();
 
+            canvas.backgroundColor = 'white';
+
             var imageData = canvas.toDataURL({
-                format: 'png',
+                format: 'jpeg',
                 multiplier: 1
             });
             EditorDownload._addImg(imageData, modal);
@@ -65,7 +65,7 @@ YUI.add('download-util', function (Y, NAME) {
                     click: function () {
                         var anchor = Y.Node.create('<a/>');
                         anchor.setAttribute('target', '_blank');
-                        anchor.setAttribute('download', 'whiteboard-image.png');
+                        anchor.setAttribute('download', 'whiteboard-image.jpeg');
                         anchor.setAttribute('href', imageData)
                         anchor.simulate('click');
                     }
