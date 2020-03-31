@@ -105,6 +105,8 @@
     margin: 0 auto;
     height: 20px;
     width: 20px;
+    background-repeat: no-repeat;
+    background-size: 20px 20px;
 }
 
 .whiteboard-portlet .editor  menu button i {
@@ -126,22 +128,22 @@
 
 .whiteboard-portlet .editor menu button[data-shape="rectangle"] span,
 .whiteboard-portlet .editor menu button[data-shape="rectangle"] span:hover {
-    background: url(../images/rectangle.gif) center no-repeat !important;
+    background-image: url(../images/rectangle.svg);
 }
 
 .whiteboard-portlet .editor menu button[data-shape="line"] span,
 .whiteboard-portlet .editor menu button[data-shape="line"] span:hover {
-    background: url(../images/line.gif) center no-repeat !important;
+    background-image: url(../images/line.svg);
 }
 
 .whiteboard-portlet .editor  menu button[data-shape="circle"] span,
 .whiteboard-portlet .editor  menu button[data-shape="circle"] span:hover {
-    background: url(../images/circle.gif) center no-repeat !important;
+    background-image: url(../images/circle.svg);
 }
 
 .whiteboard-portlet .editor menu button[data-shape="text"] span,
 .whiteboard-portlet .editor menu button[data-shape="text"] span:hover {
-    background: url(../images/text.gif) center no-repeat !important;
+    background-image: url(../images/text.svg);
 }
 
 /* color picker */

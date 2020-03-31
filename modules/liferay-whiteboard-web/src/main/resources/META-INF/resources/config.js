@@ -9,6 +9,10 @@
 						path : 'collaboration-whiteboard.js',
 						requires : []
 					},
+					'collaboration-whiteboard-common' : {
+						path : 'common.js',
+						requires : []
+					},
 					'multiuser-whiteboard' : {
 						path : 'multiuser-whiteboard.js',
 						requires : []

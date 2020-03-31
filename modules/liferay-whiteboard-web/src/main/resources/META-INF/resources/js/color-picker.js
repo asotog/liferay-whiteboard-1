@@ -46,15 +46,15 @@ YUI.add('color-picker', function (Y, NAME) {
         bindUI: function () {
             var instance = this;
             var colorPickerContainer = this.get(CONTAINER).one(SELECTOR_COLOR_PICKER_CONTAINER);
-            colorPickerContainer.removeClass('hidden');
+            colorPickerContainer.removeClass(Y.CollaborationWhiteboardConstants.hiddenCSSClass);
             this.sample = this.get(CONTAINER).one(SELECTOR_SAMPLE);
             this.sample.on('click', function (e) {
-                Y.all(SELECTOR_COLOR_PICKER_CONTAINER).addClass('hidden'); // hide other pickers first
-                colorPickerContainer.removeClass('hidden');
+                Y.all(SELECTOR_COLOR_PICKER_CONTAINER).addClass(Y.CollaborationWhiteboardConstants.hiddenCSSClass); // hide other pickers first
+                colorPickerContainer.removeClass(Y.CollaborationWhiteboardConstants.hiddenCSSClass);
             });
             this.get(CONTAINER).one(SELECTOR_CLOSE_PICKER).on('click', function (e) {
                 e.preventDefault();
-                colorPickerContainer.addClass('hidden');
+                colorPickerContainer.addClass(Y.CollaborationWhiteboardConstants.hiddenCSSClass);
             });
 
             this.hue = new Y.Dial({
@@ -99,7 +99,7 @@ YUI.add('color-picker', function (Y, NAME) {
                     instance.updatePickerUI();
                 });
             }
-            colorPickerContainer.addClass('hidden');
+            colorPickerContainer.addClass(Y.CollaborationWhiteboardConstants.hiddenCSSClass);
         },
 
         updatePickerUI: function () {
@@ -147,5 +147,5 @@ YUI.add('color-picker', function (Y, NAME) {
     Y.ColorPicker = ColorPicker;
 
 }, '@VERSION@', {
-    "requires": ["yui-base", "base-build", "dial", "slider", "event-valuechange", "color"]
+    "requires": ["yui-base", "base-build", "dial", "slider", "event-valuechange", "color", "collaboration-whiteboard-common"]
 });

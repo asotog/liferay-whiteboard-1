@@ -43,8 +43,8 @@
     A.CollaborationWhiteboardPortlet.init("<%= websocketURL %>");
 </aui:script>
 <input type="hidden" class="profile-image-path" value="<%=userImagePath %>" />
-<div class="connection-lost-alert alert alert-danger hidden" role="alert">Connection was lost please refresh the page. <a href="javascript:document.location.reload()">Reload</a></div>
-<div class="communication-unsupported-alert alert alert-danger hidden" role="alert">Communication protocol not supported by your current browser. Please try <a href="http://caniuse.com/#search=websocket"
+<div class="connection-lost-alert alert alert-danger d-none" role="alert">Connection was lost please refresh the page. <a href="javascript:document.location.reload()">Reload</a></div>
+<div class="communication-unsupported-alert alert alert-danger d-none" role="alert">Communication protocol not supported by your current browser. Please try <a href="http://caniuse.com/#search=websocket"
         target="_blank">supported</a> browser</div>
 <div class="editor">
     <div class="users-online">
@@ -81,7 +81,7 @@
             <button class="btn clean" title='<liferay-ui:message key="rivetlogic.whiteboard.clean.canvas.title"/>'><i class="icon-trash"></i></button>
             <div class="color-picker stroke yui3-skin-sam"><label><liferay-ui:message key="rivetlogic.whiteboard.stroke"/></label>
                 <span class="sample" style="background-color: #000000;"></span>
-                <div class="color-picker-container hidden">
+                <div class="color-picker-container d-none">
                     <a href="#" class="close-picker">
                         <liferay-ui:message key="rivetlogic.whiteboard.close" />
                     </a>
@@ -97,7 +97,7 @@
             </div>
             <div class="color-picker fill yui3-skin-sam"><label><liferay-ui:message key="rivetlogic.whiteboard.fill"/></label>
                 <span class="sample" style="background-color: #FFFFFF;"></span>
-                <div class="color-picker-container hidden">
+                <div class="color-picker-container d-none">
                     <a href="#" class="close-picker">
                         <liferay-ui:message key="rivetlogic.whiteboard.close" />
                     </a>
@@ -131,7 +131,7 @@
 
     </menu>
     <canvas id="editor-canvas" height="600"></canvas>
-    <div class="text-editor hidden">
+    <div class="text-editor d-none">
         <textarea class="text"></textarea>
         <button class="btn btn-primary edit"><liferay-ui:message key="rivetlogic.whiteboard.canvas.edit"/></button>
         <button class="btn cancel"><liferay-ui:message key="rivetlogic.whiteboard.canvas.cancel"/></button>

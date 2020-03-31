@@ -42,7 +42,7 @@ YUI.add('text-editor', function (Y, NAME) {
             }).render();
             panel.set('headerContent', strings[TEXT_EDITOR_HEADER_LABEL]);
             panel.get('boundingBox').one('.modal-body').append(this.get(TEXT_EDITOR_NODE));
-            this.get(TEXT_EDITOR_NODE).removeClass('hidden');
+            this.get(TEXT_EDITOR_NODE).removeClass(Y.CollaborationWhiteboardConstants.hiddenCSSClass);
             this.set(TEXT_EDITOR, panel);
             this.bindTextEditor();
         },
@@ -80,5 +80,5 @@ YUI.add('text-editor', function (Y, NAME) {
     Y.TextEditor = TextEditor;
 
 }, '@VERSION@', {
-    "requires": ["yui-base", "base-build", "panel", "dd-plugin", "aui-modal"]
+    "requires": ["yui-base", "base-build", "panel", "dd-plugin", "aui-modal", "collaboration-whiteboard-common"]
 });
