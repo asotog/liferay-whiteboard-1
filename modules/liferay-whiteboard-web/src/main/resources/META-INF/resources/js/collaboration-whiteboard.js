@@ -22,7 +22,7 @@ AUI.add('collaboration-whiteboard-portlet', function (A, NAME) {
      * Inits whiteboard portlet
      * @param url {String} Websocket endpoint url
      */
-    A.CollaborationWhiteboardPortlet.init = function (url) {
+    A.CollaborationWhiteboardPortlet.init = function (url, userFullName) {
 
         var SELECTOR_WHITEBOARD_PORTLET = '.whiteboard-portlet';
         var SELECTOR_CANVAS = 'canvas';
@@ -61,7 +61,7 @@ AUI.add('collaboration-whiteboard-portlet', function (A, NAME) {
             onlineUsersTemplate: A.one(SELECTOR_ONLINE_USERS_TEMPLATE).get('innerHTML'),
             usersTooltipsTemplate: A.one(SELECTOR_USER_TOOLTIPS_TEMPLATE).get('innerHTML'),
             baseImagePath: Liferay.ThemeDisplay.getPathImage(),
-            userName: (Liferay.ThemeDisplay.getUserName() != '') ? Liferay.ThemeDisplay.getUserName() : 'Guest',
+            userName: (userFullName != '') ? userFullName : 'Guest',
             /* for user tooltip */
             userImagePath: A.one('.whiteboard-portlet .profile-image-path').get('value') /* for user tooltip */
         });
