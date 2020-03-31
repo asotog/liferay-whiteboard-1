@@ -67,11 +67,11 @@ AUI.add('collaboration-whiteboard-portlet', function (A, NAME) {
         });
 
         editor.on('connectionClosed', function () {
-            A.one(SELECTOR_WHITEBOARD_PORTLET).one(SELECTOR_CONNECTION_LOST_MESSAGE).removeClass(Y.CollaborationWhiteboardConstants.hiddenCSSClass);
+            A.one(SELECTOR_WHITEBOARD_PORTLET).one(SELECTOR_CONNECTION_LOST_MESSAGE).removeClass(A.CollaborationWhiteboardConstants.hiddenCSSClass);
         });
         // if multi user communication not supported by current browser we let know the user about the issue
         if (!editor.supported) {
-            A.one(SELECTOR_WHITEBOARD_PORTLET).one(SELECTOR_CONNECTION_UNSUPPORTED_MESSAGE).removeClass(Y.CollaborationWhiteboardConstants.hiddenCSSClass);
+            A.one(SELECTOR_WHITEBOARD_PORTLET).one(SELECTOR_CONNECTION_UNSUPPORTED_MESSAGE).removeClass(A.CollaborationWhiteboardConstants.hiddenCSSClass);
         };
 
     }
