@@ -62,23 +62,23 @@
     </div>
     <menu>
         <div class="btn-group-vertical">
-            <button class="btn add" data-shape="rectangle" title='<liferay-ui:message key="rivetlogic.whiteboard.shapes.rectangle.title"/>'><span></span></button>
-            <button class="btn add" data-shape="line" title='<liferay-ui:message key="rivetlogic.whiteboard.shapes.line.title"/>'><span></span></button>
-            <button class="btn add" data-shape="circle" title='<liferay-ui:message key="rivetlogic.whiteboard.shapes.circle.title"/>'><span></span></button>
-            <button class="btn free" title='<liferay-ui:message key="rivetlogic.whiteboard.shapes.free.title"/>'><i class="icon-pencil" ></i></button>
-            <button class="btn add" data-shape="text" title='<liferay-ui:message key="rivetlogic.whiteboard.shapes.text.title"/>'><span></span></button>
+            <button class="btn add" data-shape="rectangle" title='<liferay-ui:message key="rivetlogic.whiteboard.shapes.rectangle.title"/>'><clay:icon symbol="square" /></button>
+            <button class="btn add" data-shape="line" title='<liferay-ui:message key="rivetlogic.whiteboard.shapes.line.title"/>'><clay:icon symbol="hr" /></button>
+            <button class="btn add" data-shape="circle" title='<liferay-ui:message key="rivetlogic.whiteboard.shapes.circle.title"/>'><clay:icon symbol="circle" /></button>
+            <button class="btn free" title='<liferay-ui:message key="rivetlogic.whiteboard.shapes.free.title"/>'><clay:icon symbol="pencil" /></button>
+            <button class="btn add" data-shape="text" title='<liferay-ui:message key="rivetlogic.whiteboard.shapes.text.title"/>'><clay:icon symbol="text" /></button>
             <button class="btn delete" title='<liferay-ui:message key="rivetlogic.whiteboard.shapes.remove.title"/>'><i class="icon-remove"></i></button>
             <div class="dropdown-menu-wrapper">
                 <button class="btn objects-options" title='<liferay-ui:message key="rivetlogic.whiteboard.shapes.objectsoptions.title"/>'>
-                    <i class="icon-cog"></i>
+                    <clay:icon symbol="cog" />
                 </button>
                 <ul class="dropdown-menu text-left" role="menu" aria-labelledby="dropdownMenu">
                     <li><a data-action="send-to-back" href="javascript:void(0)"><liferay-ui:message key="rivetlogic.whiteboard.shapes.sendtoback.title"/></a></li>
                     <li><a data-action="bring-to-front" href="javascript:void(0)"><liferay-ui:message key="rivetlogic.whiteboard.shapes.bringtofront.title"/></a></li>
                 </ul>
             </div>
-            <button class="btn download" title='<liferay-ui:message key="rivetlogic.whiteboard.download.downloadaction"/>'><i class="icon-download-alt"></i></button>
-            <button class="btn clean" title='<liferay-ui:message key="rivetlogic.whiteboard.clean.canvas.title"/>'><i class="icon-trash"></i></button>
+            <button class="btn download" title='<liferay-ui:message key="rivetlogic.whiteboard.download.downloadaction"/>'><clay:icon symbol="download" /></button>
+            <button class="btn clean" title='<liferay-ui:message key="rivetlogic.whiteboard.clean.canvas.title"/>'><clay:icon symbol="trash" /></button>
             <div class="color-picker stroke yui3-skin-sam"><label><liferay-ui:message key="rivetlogic.whiteboard.stroke"/></label>
                 <span class="sample" style="background-color: #000000;"></span>
                 <div class="color-picker-container d-none">

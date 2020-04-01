@@ -99,16 +99,6 @@
     margin: 0;
 }
 
-.whiteboard-portlet .editor  menu button span {
-    text-indent: -9999px;
-    display: block;
-    margin: 0 auto;
-    height: 20px;
-    width: 20px;
-    background-repeat: no-repeat;
-    background-size: 20px 20px;
-}
-
 .whiteboard-portlet .editor  menu button i {
     background: none !important;
 }
@@ -124,26 +114,6 @@
 .whiteboard-portlet .editor menu button .dropdown-menu {
     left: 100%;
     top: 0;
-}
-
-.whiteboard-portlet .editor menu button[data-shape="rectangle"] span,
-.whiteboard-portlet .editor menu button[data-shape="rectangle"] span:hover {
-    background-image: url(../images/rectangle.svg);
-}
-
-.whiteboard-portlet .editor menu button[data-shape="line"] span,
-.whiteboard-portlet .editor menu button[data-shape="line"] span:hover {
-    background-image: url(../images/line.svg);
-}
-
-.whiteboard-portlet .editor  menu button[data-shape="circle"] span,
-.whiteboard-portlet .editor  menu button[data-shape="circle"] span:hover {
-    background-image: url(../images/circle.svg);
-}
-
-.whiteboard-portlet .editor menu button[data-shape="text"] span,
-.whiteboard-portlet .editor menu button[data-shape="text"] span:hover {
-    background-image: url(../images/text.svg);
 }
 
 /* color picker */
