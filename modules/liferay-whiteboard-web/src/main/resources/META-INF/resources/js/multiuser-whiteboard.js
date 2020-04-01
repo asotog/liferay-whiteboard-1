@@ -176,7 +176,7 @@ AUI.add('multiuser-whiteboard', function (A, NAME) {
                 var cachedShape = this.getShapeFromCache(command.cacheId);
 
                 if (command.action == A.EditorManager.CONSTANTS.MODIFY && cachedShape) {
-                    this.get('canvas').discardActiveGroup();
+                    this.discardActiveObjects();
                     this.modifyShape(command);
                 }
                 if (command.action == A.EditorManager.CONSTANTS.DELETE && cachedShape) {
@@ -209,6 +209,11 @@ AUI.add('multiuser-whiteboard', function (A, NAME) {
                     this.animateTooltip(userTooltipNode);
                 }
             }
+        },
+
+        discardActiveObjects() {
+            this.get('canvas').discardActiveObject();
+            return this.get('canvas');
         },
 
         /**

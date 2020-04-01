@@ -111,7 +111,6 @@ AUI.add('whiteboard', function (A, NAME) {
             });
 
             menu.one(SELECTOR_DOWNLOAD).on('click', function (e) {
-                instance.get(CANVAS).deactivateAll().renderAll(); // get rid of active indicator over shapes
                 A.EditorDownload.show(instance.get(CANVAS));
             });
 
@@ -163,10 +162,10 @@ AUI.add('whiteboard', function (A, NAME) {
                     instance.showConfirmMessage(strings['rivetlogic.whiteboard.confirm.deleteagrouppopup.title'],
                         strings['rivetlogic.whiteboard.confirm.deleteagrouppopup.message'],
                         function () {
-                            instance.get(CANVAS).getActiveGroup().forEachObject(function (shape) {
+                            instance.get(CANVAS).getActiveObjects().forEach(function (shape) {
                                 instance.get(CANVAS).remove(shape);
                             });
-                            instance.get(CANVAS).discardActiveGroup().renderAll();
+                            this.discardActiveObjects().renderAll();
                         });
                 });
             });
@@ -177,7 +176,7 @@ AUI.add('whiteboard', function (A, NAME) {
                     strings['rivetlogic.whiteboard.confirm.deleteallpopup.message'],
                     function () {
                         instance.deleteAllShapes();
-                        instance.get(CANVAS).discardActiveGroup().renderAll();
+                        this.discardActiveObjects().renderAll();
                     });
             });
 
@@ -219,14 +218,19 @@ AUI.add('whiteboard', function (A, NAME) {
             });
         },
 
+        discardActiveObjects() {
+            instance.get(CANVAS).discardActiveObject();
+            return instance.get(CANVAS);
+        },
+    
         /**
          * 
          * Verify multiple shapes selected/grouped and retrieve them
          * 
          */
         retrieveGroupedShapes: function (cb) {
-            if (this.get(CANVAS).getActiveGroup()) {
-                cb(this.get(CANVAS).getActiveGroup().getObjects());
+            if (this.get(CANVAS).getActiveObjects()) {
+                cb(this.get(CANVAS).getActiveObjects());
             }
         },
 
