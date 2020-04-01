@@ -64,9 +64,9 @@ AUI.add('whiteboard', function (A, NAME) {
 
                 if (instance.get(SELECTED_SHAPE)) {
                     if (instance.get(SELECTED_SHAPE).type != EditorManager.CONSTANTS.TEXT) {
-                        instance.get(SELECTED_SHAPE).stroke = e.color;
+                        instance.get(SELECTED_SHAPE).set('stroke', e.color);
                     } else {
-                        instance.get(SELECTED_SHAPE).fill = e.color;
+                        instance.get(SELECTED_SHAPE).set('fill', e.color);
                     }
                     instance.get(SELECTED_SHAPE).fire('modified');
                     instance.get(CANVAS).renderAll();
@@ -84,7 +84,7 @@ AUI.add('whiteboard', function (A, NAME) {
                 EditorManager.CONSTANTS.CIRCLE_STATE.fill = e.color;
                 if (instance.get(SELECTED_SHAPE) && instance.get(SELECTED_SHAPE).type != EditorManager.CONSTANTS.PATH &&
                     instance.get(SELECTED_SHAPE).type != EditorManager.CONSTANTS.TEXT) {
-                    instance.get(SELECTED_SHAPE).fill = e.color;
+                    instance.get(SELECTED_SHAPE).set('fill', e.color);
                     instance.get(SELECTED_SHAPE).fire('modified');
                     instance.get(CANVAS).renderAll();
                 }
