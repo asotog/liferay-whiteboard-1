@@ -155,7 +155,7 @@ AUI.add('whiteboard', function (A, NAME) {
                     instance.showConfirmMessage(strings['rivetlogic.whiteboard.confirm.deleteshapepopup.title'],
                         strings['rivetlogic.whiteboard.confirm.deleteshapepopup.message'],
                         function () {
-                            selectedShape.remove();
+                            instance.get(CANVAS).remove(selectedShape);
                         });
                 }
                 instance.retrieveGroupedShapes(function (shapes) {
@@ -165,7 +165,7 @@ AUI.add('whiteboard', function (A, NAME) {
                             instance.get(CANVAS).getActiveObjects().forEach(function (shape) {
                                 instance.get(CANVAS).remove(shape);
                             });
-                            this.discardActiveObjects().renderAll();
+                            instance.discardActiveObjects().renderAll();
                         });
                 });
             });
@@ -176,7 +176,7 @@ AUI.add('whiteboard', function (A, NAME) {
                     strings['rivetlogic.whiteboard.confirm.deleteallpopup.message'],
                     function () {
                         instance.deleteAllShapes();
-                        this.discardActiveObjects().renderAll();
+                        instance.discardActiveObjects().renderAll();
                     });
             });
 
@@ -400,10 +400,11 @@ AUI.add('whiteboard', function (A, NAME) {
          * 
          */
         deleteAllShapes: function () {
+            var instance = this;
             var cache = this.get(CACHE);
             this.set(CLEANING, true);
             A.Array.each(cache, function (item) {
-                item.object.remove();
+                instance.get(CANVAS).remove(item.object);
             });
             this.set(CLEANING, false);
             cache = [];

@@ -53,7 +53,9 @@ YUI.add('text-editor', function (Y, NAME) {
                 instance.get(TEXT_EDITOR).hide();
             });
             this.get(TEXT_EDITOR_NODE).one(SELECTOR_EDIT_BUTTON).on('click', function () {
-                instance.get(CURRENT_TEXT_COMPONENT).setText(instance.get(TEXT_EDITOR_NODE).one(SELECTOR_TEXT).get('value'));
+                instance.get(CURRENT_TEXT_COMPONENT).set({
+                    text: instance.get(TEXT_EDITOR_NODE).one(SELECTOR_TEXT).get('value')
+                });
                 instance.get(CURRENT_TEXT_COMPONENT).fire('modified');
                 instance.fire(EVT_TEXT_EDITED);
                 instance.get(TEXT_EDITOR).hide();
