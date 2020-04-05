@@ -151,6 +151,10 @@
     z-index: 10;
 }
 
+.whiteboard-portlet .color-picker .yui3-dial-label {
+    visibility: hidden;
+}
+
 .whiteboard-portlet .color-picker .hue-dial,
 .whiteboard-portlet .color-picker .sliders {
     float: left;
