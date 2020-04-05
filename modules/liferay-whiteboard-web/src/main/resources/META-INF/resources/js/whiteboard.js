@@ -124,13 +124,13 @@ AUI.add('whiteboard', function (A, NAME) {
                 switch (action) {
                     case 'send-to-back':
                         if (instance.get(SELECTED_SHAPE)) {
-                            instance.get(SELECTED_SHAPE).sendToBack();
+                            instance.get(CANVAS).sendToBack(instance.get(SELECTED_SHAPE));
                             instance.get(SELECTED_SHAPE).fire('afterSendToBack');
                         }
                         break;
                     case 'bring-to-front':
                         if (instance.get(SELECTED_SHAPE)) {
-                            instance.get(SELECTED_SHAPE).bringToFront();
+                            instance.get(CANVAS).bringToFront(instance.get(SELECTED_SHAPE));
                             instance.get(SELECTED_SHAPE).fire('afterBringToFront');
                         }
                         break;
