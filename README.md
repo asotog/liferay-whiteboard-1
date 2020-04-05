@@ -3,6 +3,8 @@ liferay-whiteboard
 
 Collaboration whiteboard app in real time for multiple users for Liferay 7.
 
+## Application container configuration
+On tomcat there is a limit on the max buffer per message allowed, default size is 8192 bytes, this is configurable with `org.apache.tomcat.websocket.textBufferSize` on web.xml, otherwise if message is exceeded a popup is shown.
 
 ## Docker local environment startup
 ### Prerequisites

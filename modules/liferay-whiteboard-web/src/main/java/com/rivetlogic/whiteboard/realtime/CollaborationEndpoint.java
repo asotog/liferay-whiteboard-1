@@ -39,7 +39,10 @@ public class CollaborationEndpoint extends Endpoint {
 	public static final String CACHE_NAME = CollaborationEndpoint.class.getName();
 	@SuppressWarnings("rawtypes")
 	private static PortalCache portalCache = MultiVMPoolUtil.getPortalCache(CACHE_NAME);
-	
+
+	// Max incoming bytes session can receive in the backend
+	private static final String INCOMING_MAX_BUFFER_SIZE = "sessionMaxBufferSize";
+
 	private static final String DUMP_MESSAGE = "dump"; // a dump messsage is when new user comes and needs to receive the current whiteboard shapes created/stored
 	private static final Log LOG = LogFactoryUtil.getLog(CollaborationEndpoint.class);
 	
@@ -81,14 +84,14 @@ public class CollaborationEndpoint extends Endpoint {
 
 				@Override
 				public void onMessage(String text) {
-					onMessageHandler(text);
+					onMessageHandler(session, text);
 				}
 
 			});
 		}
 	}
 	
-	private void onMessageHandler(String text) {
+	private void onMessageHandler(Session session, String text) {
 		ConcurrentMap<String, JSONObject> whiteBoardDump = getWhiteBoardDump();
 		ConcurrentMap<String, UserData> loggedUserMap = getLoggedUsersMap();
 		ConcurrentMap<String, Session> sessions = getSessions();
@@ -97,7 +100,8 @@ public class CollaborationEndpoint extends Endpoint {
 			JSONObject jsonMessage = JSONFactoryUtil.createJSONObject(text);
 			if (WhiteboardUtil.LOGIN.equals(jsonMessage.getString(WhiteboardUtil.TYPE))) {
 				JSONObject usersLoggedMessage = WhiteboardUtil.generateLoggedUsersJSON(loggedUserMap);
-                /* adds whiteboard dump to the message */
+				/* adds whiteboard dump to the message */
+				usersLoggedMessage.put(INCOMING_MAX_BUFFER_SIZE, session.getMaxTextMessageBufferSize());
                 usersLoggedMessage.put(DUMP_MESSAGE, WhiteboardUtil.loadWhiteboardDump(whiteBoardDump));
                 broadcast(usersLoggedMessage.toString(), sessions);
 			} else {
@@ -117,6 +121,7 @@ public class CollaborationEndpoint extends Endpoint {
 	@Override
 	public void onClose(Session session, CloseReason closeReason) {
 		super.onClose(session, closeReason);
+		LOG.debug(closeReason);
 		ConcurrentMap<String, UserData> loggedUserMap = getLoggedUsersMap();
 		ConcurrentMap<String, Session> sessions = getSessions();
 		
