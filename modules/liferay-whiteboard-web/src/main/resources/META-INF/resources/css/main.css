@@ -1,7 +1,10 @@
 
+.modal-dialog {
+    z-index: 999 !important;
+}
+
 .whiteboard-btn-group {
     padding: 10px 0;
-   
 }
 
 .whiteboard-btn-group button {
