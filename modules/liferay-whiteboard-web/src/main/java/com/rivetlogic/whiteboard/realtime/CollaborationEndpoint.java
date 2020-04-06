@@ -21,7 +21,9 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
+import com.liferay.portal.kernel.util.PropsUtil;
 
 @Component(
 		immediate = true,
@@ -42,6 +44,7 @@ public class CollaborationEndpoint extends Endpoint {
 
 	// Max incoming bytes session can receive in the backend
 	private static final String INCOMING_MAX_BUFFER_SIZE = "sessionMaxBufferSize";
+	private static final String TEXT_BUFFER_SIZE_PROP = "com.rivetlogic.whiteboard.realtime.textBufferSize";
 
 	private static final String DUMP_MESSAGE = "dump"; // a dump messsage is when new user comes and needs to receive the current whiteboard shapes created/stored
 	private static final Log LOG = LogFactoryUtil.getLog(CollaborationEndpoint.class);
@@ -53,6 +56,8 @@ public class CollaborationEndpoint extends Endpoint {
 	
 	@Override
 	public void onOpen(Session session, EndpointConfig config) {
+		// overwrite default max text message buffer size
+		session.setMaxTextMessageBufferSize(GetterUtil.getInteger(PropsUtil.get(TEXT_BUFFER_SIZE_PROP), 8192));
 		// connection url query string parameters map
 		Map<String, String[]> parameters = HttpUtil.getParameterMap(session.getQueryString());
 		// user parameters
