@@ -90,6 +90,10 @@ AUI.add('whiteboard', function (A, NAME) {
                 }
             });
 
+            instance.after('selectedShapeChange', function(e) {
+                instance.displayShapeColors(strokeColorPicker, fillColorPicker);
+            });
+
             /* add shapes buttons  */
             menu.delegate('click', function (e) {
                 menu.all(SELECTOR_BUTTON).removeClass(CLASS_SELECTED);
@@ -372,6 +376,16 @@ AUI.add('whiteboard', function (A, NAME) {
 
             }
 
+        },
+
+        displayShapeColors: function(strokeColorPicker, fillColorPicker) {
+            const instance = this;
+            const shape = instance.get(SELECTED_SHAPE);
+            if (shape) {
+                const { stroke, fill } = shape;
+                strokeColorPicker.setSampleColor(stroke);
+                fillColorPicker.setSampleColor(fill);
+            }
         },
 
         /**
