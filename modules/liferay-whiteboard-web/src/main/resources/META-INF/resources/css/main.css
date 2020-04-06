@@ -1,7 +1,10 @@
 
+.modal-dialog {
+    z-index: 999 !important;
+}
+
 .whiteboard-btn-group {
     padding: 10px 0;
-   
 }
 
 .whiteboard-btn-group button {
@@ -11,6 +14,10 @@
 .whiteboard-portlet,
 .whiteboard-portlet label {
     font-size: 12px;
+}
+
+.whiteboard-portlet label {
+    display: block;
 }
 
 .whiteboard-portlet #container,
@@ -149,6 +156,10 @@
     height: 160px;
     background: #FFFFFF;
     z-index: 10;
+}
+
+.whiteboard-portlet .color-picker .yui3-dial-label {
+    visibility: hidden;
 }
 
 .whiteboard-portlet .color-picker .hue-dial,

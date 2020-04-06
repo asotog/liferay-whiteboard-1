@@ -124,13 +124,13 @@ AUI.add('whiteboard', function (A, NAME) {
                 switch (action) {
                     case 'send-to-back':
                         if (instance.get(SELECTED_SHAPE)) {
-                            instance.get(SELECTED_SHAPE).sendToBack();
+                            instance.get(CANVAS).sendToBack(instance.get(SELECTED_SHAPE));
                             instance.get(SELECTED_SHAPE).fire('afterSendToBack');
                         }
                         break;
                     case 'bring-to-front':
                         if (instance.get(SELECTED_SHAPE)) {
-                            instance.get(SELECTED_SHAPE).bringToFront();
+                            instance.get(CANVAS).bringToFront(instance.get(SELECTED_SHAPE));
                             instance.get(SELECTED_SHAPE).fire('afterBringToFront');
                         }
                         break;
@@ -266,21 +266,14 @@ AUI.add('whiteboard', function (A, NAME) {
                     confirm: strings['rivetlogic.whiteboard.confirm.label'],
                     cancel: strings['rivetlogic.whiteboard.cancel.label']
                 });
-
-                Liferay.Util.openWindow({
-                    dialog: {
-                        bodyContent: '',
-                        headerContent: '',
-                        width: 330,
-                        height: 'auto',
-                        visible: false
-                    }
-                }, function (dialog) {
-                    instance.confirmMessage = dialog;
-                    instance.confirmMessage.get('boundingBox').one('.modal-body').append('<div class="message text-center"></div>');
-                    instance.confirmMessage.get('boundingBox').one('.modal-body').append(buttonsTpl);
-                    setModal();
-                });
+                instance.confirmMessage = new A.Modal({
+                    centered: true,
+                    headerContent: '<h3>Modal header</h3>',
+                    modal: false,
+                    width: 330,
+                }).render();
+                instance.confirmMessage.get('boundingBox').one('.modal-body').append('<div class="message text-center"></div>');
+                instance.confirmMessage.get('boundingBox').one('.modal-body').append(buttonsTpl);
             }
             setModal();
         },
@@ -612,5 +605,5 @@ AUI.add('whiteboard', function (A, NAME) {
     A.EditorManager = EditorManager;
 
 }, '@VERSION@', {
-    "requires": ["download-util", "yui-base", "base-build", "text-editor", "color-picker", "node-event-simulate"]
+    "requires": ["download-util", "yui-base", "base-build", "text-editor", "color-picker", "node-event-simulate", "aui-modal"]
 });

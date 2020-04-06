@@ -27,6 +27,7 @@ AUI.add('multiuser-whiteboard', function (A, NAME) {
     var EDITOR_ID = 'editorId';
     var SELECTOR_USERS_ONLINE = '.users-online';
     var SELECTOR_USER_MOD_TOOLTIPS = '.user-modification-tooltips';
+    var MESSAGE_MAX_BYTES = 'messageMaxBytesSize';
 
     var MultiuserEditor = A.Base.create('multiuser-whiteboard', A.EditorManager, [], {
 
@@ -72,6 +73,7 @@ AUI.add('multiuser-whiteboard', function (A, NAME) {
                     instance.executeCommands(data.commands || []);
                     /* if user is currently joining the whiteboard, load the whiteboard  dump to show shapes previously created */
                     if (instance.get(JOINING)) {
+                        instance.set(MESSAGE_MAX_BYTES, data.sessionMaxBufferSize)
                         instance.executeCommands(data.dump);
                         instance.set(JOINING, false);
                     }
@@ -85,7 +87,16 @@ AUI.add('multiuser-whiteboard', function (A, NAME) {
                 if (!instance.get(COMMANDS).length) {
                     return;
                 }
-                websocket.send(instance.stringifyCommands()); /* stringify not supported on old browsers */
+                var message = instance.stringifyCommands();
+                if (instance.get(MESSAGE_MAX_BYTES) > instance.calculateMessageBytes(message)) {
+                    websocket.send(message); /* stringify not supported on old browsers */
+                } else {
+                    const { length, [length - 1]: lastObject } = instance.get('canvas').getObjects();
+                    instance.get('canvas').remove(lastObject);
+                    instance.fire('messageSizeExceeded', {
+                        messageMaxBytesSize: instance.get(MESSAGE_MAX_BYTES)
+                    });
+                }
                 instance.set(COMMANDS, []);
             }, MultiuserEditor.CONSTANTS.BROADCAST_INTERVAL);
             // when SPA (single page app) navigation is configured
@@ -181,13 +192,13 @@ AUI.add('multiuser-whiteboard', function (A, NAME) {
                 }
                 if (command.action == A.EditorManager.CONSTANTS.DELETE && cachedShape) {
                     this.deleteShapeFromCache(command.cacheId);
-                    cachedShape.remove();
+                    this.get('canvas').remove(cachedShape);
                 }
                 if (command.action == A.EditorManager.CONSTANTS.SENT_TO_BACK && cachedShape) {
-                    cachedShape.sendToBack();
+                    this.get('canvas').sendToBack(cachedShape);
                 }
                 if (command.action == A.EditorManager.CONSTANTS.BRING_TO_FRONT && cachedShape) {
-                    cachedShape.bringToFront();
+                    this.get('canvas').bringToFront(cachedShape);
                 }
                 if (command.action == MultiuserEditor.CONSTANTS.USERS) {
                     this.get(CONTAINER).one(SELECTOR_USERS_ONLINE + ' .count').set('text', command.users.length);
@@ -239,6 +250,10 @@ AUI.add('multiuser-whiteboard', function (A, NAME) {
             });
 
             animStart.run();
+        },
+
+        calculateMessageBytes(message) {
+            return encodeURI(message).split(/%..|./).length - 1;
         }
 
     }, {
@@ -291,9 +306,14 @@ AUI.add('multiuser-whiteboard', function (A, NAME) {
             userName: {
                 value: ''
             },
+
             userImagePath: {
                 value: ''
-            }
+            },
+
+            messageMaxBytesSize: {
+                value: 0,
+            },
 
         }
     });
