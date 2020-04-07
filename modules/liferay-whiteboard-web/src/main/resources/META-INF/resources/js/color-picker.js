@@ -124,9 +124,12 @@ YUI.add('color-picker', function (Y, NAME) {
             this.fire(EVT_COLOR_CHANGE, {
                 color: rgbFormattedColor
             })
-            this.color.setStyle('backgroundColor', rgbFormattedColor);
-            this.sample.setStyle('backgroundColor', rgbFormattedColor);
+            this.color.setStyle('backgroundColor', rgbFormattedColor);  
+            this.setSampleColor(rgbFormattedColor);
+        },
 
+        setSampleColor: function(color) {
+            this.sample.setStyle('backgroundColor', color);
         }
 
     }, {
