@@ -38,7 +38,7 @@ YUI.add('text-editor', function (Y, NAME) {
                 zIndex: Liferay.zIndex.TOOLTIP,
                 centered: true,
                 visible: false,
-                modal: true
+                modal: false
             }).render();
             panel.set('headerContent', strings[TEXT_EDITOR_HEADER_LABEL]);
             panel.get('boundingBox').one('.modal-body').append(this.get(TEXT_EDITOR_NODE));
