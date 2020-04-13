@@ -84,14 +84,17 @@ YUI.add('color-picker', function (Y, NAME) {
             this.color = this.get(CONTAINER).one(SELECTOR_COLOR);
 
             this.hue.after('valueChange', function (e) {
+                instance.set('h', null);
                 instance.updatePickerUI();
             });
 
             this.sat.after('thumbMove', function (e) {
+                instance.set('s', null);
                 instance.updatePickerUI();
             });
 
             this.lum.after('thumbMove', function (e) {
+                instance.set('l', null);
                 instance.updatePickerUI();
             });
             if (this.opacity) {
@@ -103,9 +106,9 @@ YUI.add('color-picker', function (Y, NAME) {
         },
 
         updatePickerUI: function () {
-            var h = this.hue.get('value'),
-                s = this.sat.get('value'),
-                l = this.lum.get('value'),
+            var h = this.get('h') || this.hue.get('value'),
+                s = this.get('s') || this.sat.get('value'),
+                l = this.get('l') || this.lum.get('value'),
                 hslString = '',
                 hexString = '';
             var rgbFormattedColor = '';
@@ -130,6 +133,19 @@ YUI.add('color-picker', function (Y, NAME) {
 
         setSampleColor: function(color) {
             this.sample.setStyle('backgroundColor', color);
+            let hsl = Y.Color.toHSL(color);
+            if (color.includes('rgba')) {
+                hsl = Y.Color.toHSLA(color);
+                this.opacity.set('value',  Y.Color.toArray(hsl)[3]);
+            } else {
+                if (this.opacity) {
+                    this.opacity.set('value', '1');
+                }
+            }
+            const [h, s, l] = Y.Color.toArray(hsl);
+            this.set('h', h);
+            this.set('s', s);
+            this.set('l', l);
         }
 
     }, {
@@ -141,6 +157,18 @@ YUI.add('color-picker', function (Y, NAME) {
 
             trigger: {
                 value: '.color-picker-btn'
+            },
+
+            h: {
+                value: null
+            },
+
+            s: {
+                value: null
+            },
+
+            l: {
+                value: null
             }
 
         }

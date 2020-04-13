@@ -30,9 +30,10 @@ YUI.add('download-util', function (Y, NAME) {
             var modal = new Y.Modal({
                 bodyContent: ' ',
                 centered: true,
+                width: 550,
                 destroyOnHide: true,
                 headerContent: strings['rivetlogic.whiteboard.download.downloadaction'],
-                modal: true,
+                modal: false,
                 render: 'body',
                 resizable: {
                     handles: 'b, r'
@@ -49,7 +50,7 @@ YUI.add('download-util', function (Y, NAME) {
             });
             EditorDownload._addImg(imageData, modal);
 
-            modal.align();
+            //modal.align();
 
             modal.addToolbar([{
                 label: Liferay.Language.get('cancel'),
@@ -72,6 +73,7 @@ YUI.add('download-util', function (Y, NAME) {
                 }
             }]);
 
+            window.setTimeout(() => modal.align(), 10);
         },
 
         /**
