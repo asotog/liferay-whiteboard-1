@@ -28,6 +28,8 @@ YUI.add('color-picker', function (Y, NAME) {
     var SELECTOR_OPACITY = 'select';
     var SELECTOR_COLOR = '.color';
     var SPACE = ' ';
+    var DEFAULT_SAT = 100;
+    var DEFAULT_LUM = 50;
 
     var ColorPicker = Y.Base.create('color-picker', Y.Base, [], {
         hue: null,
@@ -68,13 +70,13 @@ YUI.add('color-picker', function (Y, NAME) {
             this.sat = new Y.Slider({
                 min: 0,
                 max: 100,
-                value: 100,
+                value: DEFAULT_SAT,
                 render: this.get(CONTAINER).one(SELECTOR_SAT_SLIDER)
             });
             this.lum = new Y.Slider({
                 min: 0,
                 max: 100,
-                value: 50,
+                value: DEFAULT_LUM,
                 render: this.get(CONTAINER).one(SELECTOR_LUM_SLIDER)
             });
 
@@ -89,12 +91,10 @@ YUI.add('color-picker', function (Y, NAME) {
             });
 
             this.sat.after('thumbMove', function (e) {
-                instance.set('s', null);
                 instance.updatePickerUI();
             });
 
             this.lum.after('thumbMove', function (e) {
-                instance.set('l', null);
                 instance.updatePickerUI();
             });
             if (this.opacity) {
@@ -143,9 +143,9 @@ YUI.add('color-picker', function (Y, NAME) {
                 }
             }
             const [h, s, l] = Y.Color.toArray(hsl);
-            this.set('h', h);
-            this.set('s', s);
-            this.set('l', l);
+            this.set('h', parseInt(h));
+            this.sat.setValue(parseInt(s) || DEFAULT_SAT);
+            this.lum.setValue((parseInt(l) === 0 ||  parseInt(h) === 0) ? DEFAULT_LUM : parseInt(l));
         }
 
     }, {
