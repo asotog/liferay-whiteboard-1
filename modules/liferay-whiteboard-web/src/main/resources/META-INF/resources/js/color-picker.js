@@ -87,6 +87,12 @@ YUI.add('color-picker', function (Y, NAME) {
 
             this.hue.after('valueChange', function (e) {
                 instance.set('h', null);
+                if (instance.sat.get('value') === 0) {
+                    instance.sat.setValue(DEFAULT_SAT);
+                }
+                if (instance.lum.get('value') === 0 || instance.lum.get('value') === 100) {
+                    instance.lum.setValue(DEFAULT_LUM);
+                }
                 instance.updatePickerUI();
             });
 
@@ -107,8 +113,8 @@ YUI.add('color-picker', function (Y, NAME) {
 
         updatePickerUI: function () {
             var h = this.get('h') || this.hue.get('value'),
-                s = this.get('s') || this.sat.get('value'),
-                l = this.get('l') || this.lum.get('value'),
+                s = this.sat.get('value'),
+                l = this.lum.get('value'),
                 hslString = '',
                 hexString = '';
             var rgbFormattedColor = '';
@@ -128,11 +134,14 @@ YUI.add('color-picker', function (Y, NAME) {
                 color: rgbFormattedColor
             })
             this.color.setStyle('backgroundColor', rgbFormattedColor);  
-            this.setSampleColor(rgbFormattedColor);
+            this.setSampleColor(rgbFormattedColor, true);
         },
 
-        setSampleColor: function(color) {
+        setSampleColor: function(color, ignoreSetHSL) {
             this.sample.setStyle('backgroundColor', color);
+            if (ignoreSetHSL === true) {
+                return;
+            }
             let hsl = Y.Color.toHSL(color);
             if (color.includes('rgba')) {
                 hsl = Y.Color.toHSLA(color);
@@ -144,8 +153,8 @@ YUI.add('color-picker', function (Y, NAME) {
             }
             const [h, s, l] = Y.Color.toArray(hsl);
             this.set('h', parseInt(h));
-            this.sat.setValue(parseInt(s) || DEFAULT_SAT);
-            this.lum.setValue((parseInt(l) === 0 ||  parseInt(h) === 0) ? DEFAULT_LUM : parseInt(l));
+            this.sat.setValue(parseInt(s));
+            this.lum.setValue(parseInt(l));
         }
 
     }, {
