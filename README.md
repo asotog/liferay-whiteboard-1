@@ -23,3 +23,6 @@ There is a limit per websocket message sent to server, for example in Tomcat, `o
 - Run `./gradlew dockerDeploy` deploys project (modules, plugins, etc) to docker
 - Run `docker container start CONTAINER_ID` to start previously created container
 - Run `docker container stop CONTAINER_ID` to stop previously started container
+
+
+### Logic
